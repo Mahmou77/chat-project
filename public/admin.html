@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>لوحة الأدمن</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--p:#7c3aed;--pl:#a78bfa;--ac:#f59e0b;--dn:#ef4444;--ok:#22c55e;--bg:#07071a;--sf:#0e0e24;--sf2:#14142e;--bd:#1e1e42;--tx:#e2e8f0;--txm:#94a3b8;--warn:#f97316;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+#aside{width:255px;background:var(--sf);border-left:1px solid var(--bd);position:fixed;top:0;right:0;bottom:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.aside-logo{padding:16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;}
+.aside-logo .al-icon{font-size:28px;}
+.aside-logo .al-text{flex:1;}
+.aside-logo .al-title{font-size:15px;font-weight:900;background:linear-gradient(135deg,var(--pl),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.aside-logo .al-user{font-size:11px;color:var(--txm);}
+.nav-sec{padding:10px 14px 3px;font-size:9px;font-weight:700;color:var(--pl);letter-spacing:2px;text-transform:uppercase;}
+.nav-it{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:12px;border-radius:7px;margin:1px 7px;transition:all .15s;color:var(--txm);position:relative;}
+.nav-it:hover{background:rgba(124,58,237,.12);color:var(--tx);}
+.nav-it.active{background:var(--p);color:#fff;}
+.nav-ic{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.nav-badge{background:var(--dn);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;margin-right:auto;}
+
+/* ── MAIN ── */
+#main{margin-right:255px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+#topbar{background:var(--sf);border-bottom:1px solid var(--bd);padding:10px 22px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+#topbar h1{font-size:16px;font-weight:700;}
+.tb-btns{display:flex;gap:7px;align-items:center;}
+.pages-wrap{flex:1;overflow-y:auto;padding:20px;scrollbar-width:thin;}
+
+/* ── BUTTONS ── */
+.btn{padding:7px 16px;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;}
+.btn-p{background:var(--p);color:#fff;}.btn-p:hover{background:#6d28d9;}
+.btn-ok{background:var(--ok);color:#fff;}.btn-ok:hover{filter:brightness(1.1);}
+.btn-dn{background:var(--dn);color:#fff;}.btn-dn:hover{filter:brightness(1.1);}
+.btn-s{background:var(--sf2);border:1px solid var(--bd);color:var(--tx);}.btn-s:hover{border-color:var(--p);}
+.btn-ac{background:rgba(245,158,11,.15);color:var(--ac);border:1px solid rgba(245,158,11,.3);}
+.btn-warn{background:rgba(249,115,22,.15);color:var(--warn);border:1px solid rgba(249,115,22,.3);}
+.btn-sm{padding:4px 9px;font-size:11px;}
+
+/* ── PAGES ── */
+.pg{display:none;animation:pgIn .2s ease;}
+.pg.active{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:11px;margin-bottom:18px;}
+.stat-card{background:var(--sf2);border:1px solid var(--bd);border-radius:11px;padding:15px;display:flex;align-items:center;gap:11px;transition:border .2s;cursor:pointer;}
+.stat-card:hover{border-color:var(--p);}
+.st-ic{font-size:26px;}
+.st-lb{font-size:10px;color:var(--txm);}
+.st-val{font-size:22px;font-weight:700;color:var(--pl);}
+
+/* ── SECTION CARD ── */
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:14px;}
+.sc-hd{font-size:13px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:7px;justify-content:space-between;}
+.sc-hd-left{display:flex;align-items:center;gap:7px;}
+
+/* ── FORM ── */
+.fr{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;margin-bottom:10px;}
+.fg{display:flex;flex-direction:column;gap:3px;}
+.fg label{font-size:10px;color:var(--txm);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.fg input,.fg select,.fg textarea{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:8px 10px;color:var(--tx);font-family:'Tajawal',sans-serif;font-size:12px;outline:none;transition:border .2s;width:100%;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(124,58,237,.1);}
+.fg input[type=color]{height:35px;padding:2px 4px;cursor:pointer;}
+.fg textarea{resize:vertical;min-height:65px;direction:rtl;}
+.fg small{font-size:10px;color:var(--txm);margin-top:2px;}
+
+/* ── TOGGLES ── */
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.tog-row:last-child{border:none;}
+.tog-info{flex:1;min-width:0;}
+.tog-label{font-size:12px;font-weight:600;}
+.tog-desc{font-size:10px;color:var(--txm);margin-top:1px;}
+.tog{width:38px;height:20px;background:var(--bd);border-radius:10px;cursor:pointer;position:relative;transition:background .25s;flex-shrink:0;margin-right:6px;}
+.tog.on{background:var(--p);}
+.tog::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;right:3px;transition:right .25s;}
+.tog.on::after{right:21px;}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{background:var(--sf2);padding:8px 10px;text-align:right;color:var(--txm);font-size:10px;font-weight:700;border-bottom:1px solid var(--bd);white-space:nowrap;}
+.tbl td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.tbl-actions{display:flex;gap:4px;flex-wrap:wrap;}
+
+/* ── BADGES ── */
+.bdg{padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;}
+.bdg-owner{background:rgba(245,158,11,.2);color:var(--ac);}
+.bdg-admin{background:rgba(124,58,237,.2);color:var(--pl);}
+.bdg-mod{background:rgba(34,197,94,.15);color:var(--ok);}
+.bdg-user{background:rgba(148,163,184,.1);color:var(--txm);}
+.bdg-guest{background:rgba(148,163,184,.07);color:var(--txm);}
+.bdg-banned{background:rgba(239,68,68,.15);color:#f87171;}
+.bdg-ok{background:rgba(34,197,94,.15);color:var(--ok);}
+.bdg-warn{background:rgba(249,115,22,.15);color:var(--warn);}
+.bdg-free{background:rgba(148,163,184,.1);color:var(--txm);}
+.bdg-silver{background:rgba(148,163,184,.2);color:#cbd5e1;}
+.bdg-gold{background:rgba(245,158,11,.2);color:var(--ac);}
+.bdg-vip{background:rgba(124,58,237,.2);color:var(--pl);}
+
+/* ── CODE EDITOR ── */
+.code-ed{background:#080c14;border:1px solid var(--bd);border-radius:8px;padding:12px;font-family:'Courier New',monospace;font-size:12px;color:#e6edf3;resize:vertical;min-height:130px;width:100%;outline:none;direction:ltr;transition:border .2s;tab-size:2;}
+.code-ed:focus{border-color:var(--p);}
+
+/* ── THEME SWATCHES ── */
+.theme-swatches{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;}
+.swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;}
+.swatch:hover,.swatch.active{transform:scale(1.2);border-color:#fff;}
+.swatch::after{content:attr(title);position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);background:var(--sf);border:1px solid var(--bd);padding:3px 7px;border-radius:5px;font-size:10px;white-space:nowrap;display:none;pointer-events:none;}
+.swatch:hover::after{display:block;}
+
+/* ── AD SLOT ── */
+.ad-slot{background:var(--bg);border:1px dashed var(--bd);border-radius:9px;padding:12px;margin-bottom:10px;}
+.ad-slot-hd{font-size:11px;font-weight:700;color:var(--ac);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
+/* ── RANK CARD ── */
+.rank-card{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:11px;display:flex;align-items:center;gap:9px;margin-bottom:7px;transition:border .15s;}
+.rank-card:hover{border-color:var(--p);}
+.rk-glow-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+
+/* ── ITEM CARD (rooms, radio, etc.) ── */
+.item-card{background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:11px;display:flex;align-items:center;gap:10px;margin-bottom:8px;transition:border .15s;}
+.item-card:hover{border-color:var(--bd);}
+.ic-icon{font-size:20px;flex-shrink:0;width:26px;text-align:center;}
+.ic-icon img{width:26px;height:26px;border-radius:5px;object-fit:cover;}
+.ic-info{flex:1;min-width:0;}
+.ic-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ic-sub{font-size:11px;color:var(--txm);}
+.ic-actions{display:flex;gap:5px;flex-shrink:0;}
+
+/* ── PERM GRID ── */
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:8px;}
+.perm-item{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:8px 10px;display:flex;align-items:center;gap:6px;font-size:11px;}
+
+/* ── PAGINATION ── */
+.pag{display:flex;gap:5px;margin-top:11px;flex-wrap:wrap;align-items:center;}
+.pag-btn{padding:4px 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:6px;color:var(--tx);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;transition:all .15s;}
+.pag-btn:hover{border-color:var(--p);}
+.pag-btn.active{background:var(--p);border-color:var(--p);color:#fff;}
+
+/* ── EMOJI GRID (admin) ── */
+.emoji-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;}
+.emoji-admin-card{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;text-align:center;}
+.emoji-admin-card img{width:36px;height:36px;border-radius:5px;display:block;margin:0 auto 5px;}
+.emoji-admin-card .em-name{font-size:10px;color:var(--txm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.emoji-admin-card .em-del{background:var(--dn);color:#fff;border:none;border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;margin-top:4px;width:100%;}
+
+/* ── TABS (inside a section) ── */
+.inner-tabs{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--bd);margin-bottom:14px;}
+.inner-tab{flex:1;padding:7px 10px;background:transparent;border:none;color:var(--txm);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;transition:all .2s;text-align:center;}
+.inner-tab.active{background:var(--p);color:#fff;}
+
+/* ── PROFILE COLOR PREVIEW ── */
+.name-preview{padding:10px 14px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;font-size:16px;font-weight:700;margin-top:8px;text-align:center;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--sf);border:1px solid var(--ok);padding:9px 20px;border-radius:30px;font-size:12px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.err{border-color:var(--dn);color:#f87171;}
+#toast.warn{border-color:var(--warn);color:var(--warn);}
+
+/* ── MODAL ── */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
+.modal.show{display:flex;}
+.modal-box{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:22px;width:460px;max-width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(.97);}to{opacity:1;transform:none;}}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:7px;}
+.modal-close{margin-right:auto;background:none;border:none;color:var(--txm);cursor:pointer;font-size:18px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #aside{transform:translateX(100%);transition:transform .3s;width:240px;}
+  #aside.open{transform:translateX(0);}
+  #main{margin-right:0;}
+  .pages-wrap{padding:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside id="aside">
+  <div class="aside-logo">
+    <div class="al-icon">⚙️</div>
+    <div class="al-text">
+      <div class="al-title">لوحة التحكم الكاملة</div>
+      <div class="al-user" id="aside-username">صاحب الموقع</div>
+    </div>
+  </div>
+
+  <div class="nav-sec">📊 عامة</div>
+  <div class="nav-it active" onclick="goto('dashboard')"><span class="nav-ic">🏠</span>لوحة المعلومات</div>
+  <div class="nav-it" onclick="goto('live-monitor')"><span class="nav-ic">👁️</span>المراقبة الحية</div>
+
+  <div class="nav-sec">🎨 المظهر</div>
+  <div class="nav-it" onclick="goto('identity')"><span class="nav-ic">🏷️</span>هوية الموقع</div>
+  <div class="nav-it" onclick="goto('colors')"><span class="nav-ic">🎨</span>الألوان والثيم</div>
+  <div class="nav-it" onclick="goto('fonts')"><span class="nav-ic">✍️</span>الخطوط</div>
+  <div class="nav-it" onclick="goto('layouts')"><span class="nav-ic">🖼️</span>أشكال الواجهة</div>
+  <div class="nav-it" onclick="goto('ui-icons')"><span class="nav-ic">🔘</span>أيقونات الواجهة</div>
+  <div class="nav-it" onclick="goto('custom-css')"><span class="nav-ic">💻</span>CSS مخصص</div>
+
+  <div class="nav-sec">💬 الشات</div>
+  <div class="nav-it" onclick="goto('rooms')"><span class="nav-ic">🏠</span>الغرف</div>
+  <div class="nav-it" onclick="goto('chat-settings')"><span class="nav-ic">⚙️</span>إعدادات الشات</div>
+  <div class="nav-it" onclick="goto('messages-admin')"><span class="nav-ic">💬</span>مراقبة الرسائل</div>
+  <div class="nav-it" onclick="goto('banned-words')"><span class="nav-ic">🚫</span>الكلمات المحظورة</div>
+  <div class="nav-it" onclick="goto('link-rules')"><span class="nav-ic">🔗</span>قواعد الروابط</div>
+
+  <div class="nav-sec">👥 المستخدمون</div>
+  <div class="nav-it" onclick="goto('users')"><span class="nav-ic">👥</span>إدارة المستخدمين</div>
+  <div class="nav-it" onclick="goto('bans')"><span class="nav-ic">🚫</span>الحظر والكتم</div>
+  <div class="nav-it" onclick="goto('permissions')"><span class="nav-ic">🔐</span>الصلاحيات والأدوار</div>
+  <div class="nav-it" onclick="goto('ranks')"><span class="nav-ic">🏆</span>الرتب والمستويات</div>
+  <div class="nav-it" onclick="goto('subscriptions')"><span class="nav-ic">💎</span>الاشتراكات والنقاط</div>
+  <div class="nav-it" onclick="goto('default-avatars')"><span class="nav-ic">🖼️</span>الصور الافتراضية</div>
+  <div class="nav-it" onclick="goto('profile-themes')"><span class="nav-ic">🎭</span>أشكال الملف الشخصي</div>
+  <div class="nav-it" onclick="goto('bots')"><span class="nav-ic">🤖</span>البوتات</div>
+
+  <div class="nav-sec">📢 المحتوى</div>
+  <div class="nav-it" onclick="goto('announcements')"><span class="nav-ic">📢</span>شريط الإعلانات</div>
+  <div class="nav-it" onclick="goto('broadcast')"><span class="nav-ic">📨</span>إشعار جماعي</div>
+  <div class="nav-it" onclick="goto('ads')"><span class="nav-ic">💰</span>إدارة الإعلانات</div>
+  <div class="nav-it" onclick="goto('wall-admin')"><span class="nav-ic">🧱</span>الحائط والمنشورات</div>
+  <div class="nav-it" onclick="goto('reports')"><span class="nav-ic">⚠️</span>البلاغات <span class="nav-badge" id="reports-badge">0</span></div>
+  <div class="nav-it" onclick="goto('pages')"><span class="nav-ic">📄</span>الصفحات والسياسات</div>
+
+  <div class="nav-sec">🔧 متقدم</div>
+  <div class="nav-it" onclick="goto('emojis')"><span class="nav-ic">😊</span>الإيموجي المتحرك</div>
+  <div class="nav-it" onclick="goto('sounds')"><span class="nav-ic">🔊</span>الأصوات</div>
+  <div class="nav-it" onclick="goto('radio')"><span class="nav-ic">📻</span>الراديو</div>
+  <div class="nav-it" onclick="goto('games-admin')"><span class="nav-ic">🎮</span>الألعاب</div>
+  <div class="nav-it" onclick="goto('features')"><span class="nav-ic">🧩</span>إضافة ميزة بالكود</div>
+  <div class="nav-it" onclick="goto('languages')"><span class="nav-ic">🌐</span>اللغات</div>
+  <div class="nav-it" onclick="goto('plans')"><span class="nav-ic">📦</span>باقات الاشتراك</div>
+
+  <div class="nav-sec">💰 المالية</div>
+  <div class="nav-it" onclick="goto('payments')"><span class="nav-ic">💳</span>المدفوعات</div>
+  <div class="nav-it" onclick="goto('earnings')"><span class="nav-ic">📈</span>الأرباح والسحب</div>
+
+  <div class="nav-sec">⚙️ النظام</div>
+  <div class="nav-it" onclick="goto('activity-log')"><span class="nav-ic">📋</span>سجل النشاط</div>
+  <div class="nav-it" onclick="goto('settings')"><span class="nav-ic">⚙️</span>إعدادات عامة</div>
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN
+═══════════════════════════════════ -->
+<main id="main">
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn btn-s" id="menu-toggle" style="display:none" onclick="document.getElementById('aside').classList.toggle('open')">☰</button>
+      <h1 id="page-title">لوحة المعلومات</h1>
+    </div>
+    <div class="tb-btns">
+      <a href="/" target="_blank" class="btn btn-s">💬 الشات</a>
+      <button class="btn btn-dn" onclick="logout()">خروج</button>
+    </div>
+  </div>
+
+  <div class="pages-wrap">
+
+  <!-- ══ DASHBOARD ══ -->
+  <div class="pg active" id="pg-dashboard">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card" onclick="goto('users')"><div class="st-ic">👥</div><div><div class="st-lb">المستخدمون</div><div class="st-val" id="s-users">-</div></div></div>
+      <div class="stat-card"><div class="st-ic">🟢</div><div><div class="st-lb">متصلون الآن</div><div class="st-val" id="s-online">-</div></div></div>
+      <div class="stat-card" onclick="goto('messages-admin')"><div class="st-ic">💬</div><div><div class="st-lb">إجمالي الرسائل</div><div class="st-val" id="s-msgs">-</div></div></div>
+      <div class="stat-card"><div class="st-ic">📅</div><div><div class="st-lb">رسائل اليوم</div><div class="st-val" id="s-today">-</div></div></div>
+      <div class="stat-card" onclick="goto('wall-admin')"><div class="st-ic">📝</div><div><div class="st-lb">منشورات الحائط</div><div class="st-val" id="s-posts">-</div></div></div>
+      <div class="stat-card" onclick="goto('bans')"><div class="st-ic">🚫</div><div><div class="st-lb">المحظورون</div><div class="st-val" id="s-banned">-</div></div></div>
+      <div class="stat-card" onclick="goto('rooms')"><div class="st-ic">🏠</div><div><div class="st-lb">الغرف</div><div class="st-val" id="s-rooms">-</div></div></div>
+      <div class="stat-card" onclick="goto('earnings')"><div class="st-ic">💰</div><div><div class="st-lb">إجمالي الأرباح</div><div class="st-val" id="s-revenue">0</div></div></div>
+      <div class="stat-card"><div class="st-ic">🏆</div><div><div class="st-lb">إجمالي النقاط</div><div class="st-val" id="s-pts">-</div></div></div>
+      <div class="stat-card" onclick="goto('reports')"><div class="st-ic">⚠️</div><div><div class="st-lb">بلاغات معلقة</div><div class="st-val" id="s-reports">-</div></div></div>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">⚡ إجراءات سريعة</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px;">
+        <button class="btn btn-p" onclick="goto('identity')">✏️ اسم الموقع</button>
+        <button class="btn btn-p" onclick="goto('rooms')">➕ غرفة جديدة</button>
+        <button class="btn btn-p" onclick="goto('ads')">💰 إضافة إعلان</button>
+        <button class="btn btn-p" onclick="goto('broadcast')">📨 إشعار جماعي</button>
+        <button class="btn btn-p" onclick="goto('emojis')">😊 إيموجي جديد</button>
+        <button class="btn btn-warn" onclick="goto('reports')">⚠️ مراجعة البلاغات</button>
+        <button class="btn btn-dn" onclick="if(confirm('مسح كل الرسائل؟'))clearAllMsgs()">🗑️ مسح الرسائل</button>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">📋 آخر الرسائل</div><button class="btn btn-s btn-sm" onclick="goto('messages-admin')">عرض الكل</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>المستخدم</th><th>الرسالة</th><th>الغرفة</th><th>الوقت</th><th>حذف</th></tr></thead><tbody id="dash-msgs"></tbody></table></div>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">👥 آخر المسجلين</div><button class="btn btn-s btn-sm" onclick="goto('users')">عرض الكل</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>الاسم</th><th>الدور</th><th>النقاط</th><th>تاريخ التسجيل</th><th>إجراء</th></tr></thead><tbody id="dash-users"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══ LIVE MONITOR ══ -->
+  <div class="pg" id="pg-live-monitor">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">👁️ المراقبة الحية</div><button class="btn btn-ok btn-sm" onclick="loadLiveMonitor()">🔄 تحديث</button></div>
+      <div id="live-rooms-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ IDENTITY ══ -->
+  <div class="pg" id="pg-identity">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🏷️ هوية الموقع</div></div>
+      <div class="fr">
+        <div class="fg"><label>اسم الموقع</label><input id="c-siteName" placeholder="شات عربي"/></div>
+        <div class="fg"><label>عنوان التبويب (Title Tag)</label><input id="c-titleTag" placeholder="شات عربي | تواصل..."/></div>
+        <div class="fg"><label>وصف الموقع (Meta)</label><input id="c-siteDesc" placeholder="أفضل شات عربي..."/></div>
+        <div class="fg"><label>كلمات مفتاحية (SEO)</label><input id="c-metaKeywords" placeholder="شات, دردشة, تعارف..."/></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>رابط الشعار (URL)</label><input id="c-logoUrl" placeholder="https://..."/><small>أو ارفع ملف:</small><input type="file" id="logo-file-inp" accept="image/*" style="margin-top:4px;font-size:11px;" onchange="uploadLogoFile(this)"/></div>
+        <div class="fg"><label>موضع الشعار</label>
+          <select id="c-logoPosition">
+            <option value="left">يسار الاسم</option><option value="right">يمين الاسم</option>
+            <option value="above">فوق الاسم</option><option value="only">شعار فقط</option>
+          </select>
+        </div>
+        <div class="fg"><label>حجم الشعار (px)</label><input id="c-logoSize" type="number" value="36" min="16" max="300"/></div>
+        <div class="fg"><label>الفافيكون (URL)</label><input id="c-favicon" placeholder="https://.../icon.ico"/><input type="file" id="fav-file-inp" accept="image/*" style="margin-top:4px;font-size:11px;" onchange="uploadFaviconFile(this)"/></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Google Analytics ID</label><input id="c-googleAnalytics" placeholder="G-XXXXXXXXXX"/></div>
+        <div class="fg"><label>Facebook Pixel ID</label><input id="c-facebookPixel" placeholder="1234567890"/></div>
+        <div class="fg"><label>رمز حقوق الملكية (Footer)</label><input id="c-copyrightText" placeholder="© 2025 موقعك"/></div>
+        <div class="fg"><label>رابط حقوق الملكية</label><input id="c-copyrightLink" placeholder="https://..."/></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>اسم الحائط</label><input id="c-siteWallName" value="الحائط"/></div>
+        <div class="fg"><label>أيقونة الحائط</label><input id="c-siteWallIcon" value="🧱"/></div>
+        <div class="fg"><label>عملة الموقع (رمز)</label><input id="c-currencySymbol" value="ج.م"/></div>
+        <div class="fg"><label>كود العملة</label><input id="c-currencyCode" value="EGP"/></div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button class="btn btn-ok" onclick="saveKeys(['siteName','titleTag','siteDesc','metaKeywords','logoUrl','logoPosition','logoSize','favicon','googleAnalytics','facebookPixel','copyrightText','copyrightLink','siteWallName','siteWallIcon','currencySymbol','currencyCode'])">💾 حفظ وتطبيق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ COLORS ══ -->
+  <div class="pg" id="pg-colors">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🎨 الألوان</div></div>
+      <div class="fr">
+        <div class="fg"><label>اللون الرئيسي</label><input type="color" id="c-primaryColor" value="#7c3aed"/></div>
+        <div class="fg"><label>الرئيسي الفاتح</label><input type="color" id="c-primaryLight" value="#a78bfa"/></div>
+        <div class="fg"><label>لون التمييز (Accent)</label><input type="color" id="c-accentColor" value="#f59e0b"/></div>
+        <div class="fg"><label>الخلفية الرئيسية</label><input type="color" id="c-bgColor" value="#0f0f1a"/></div>
+        <div class="fg"><label>لون السطح</label><input type="color" id="c-surfaceColor" value="#1a1a2e"/></div>
+        <div class="fg"><label>لون الحدود</label><input type="color" id="c-borderColor" value="#2a2a4a"/></div>
+        <div class="fg"><label>خلفية رسائل الآخرين</label><input type="color" id="c-msgBg" value="#1e1e3a"/></div>
+        <div class="fg"><label>خلفية رسائلك أنت</label><input type="color" id="c-msgOwnBg" value="#3b1d8a"/></div>
+        <div class="fg"><label>لون النص الأساسي</label><input type="color" id="c-textColor" value="#e2e8f0"/></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--txm);margin-bottom:7px;">ثيمات جاهزة - اضغط لتطبيق:</div>
+        <div class="theme-swatches" id="theme-swatches"></div>
+      </div>
+      <button class="btn btn-ok" onclick="saveKeys(['primaryColor','primaryLight','accentColor','bgColor','surfaceColor','borderColor','msgBg','msgOwnBg','textColor'])">💾 حفظ الألوان</button>
+    </div>
+  </div>
+
+  <!-- ══ FONTS ══ -->
+  <div class="pg" id="pg-fonts">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">✍️ الخطوط</div></div>
+      <div class="fr">
+        <div class="fg"><label>خط الشات</label>
+          <select id="c-chatFont" onchange="previewFont()">
+            <option value="Tajawal">Tajawal (تجوال)</option><option value="Cairo">Cairo (القاهرة)</option>
+            <option value="Almarai">Almarai (المراعي)</option><option value="Noto Kufi Arabic">Noto Kufi Arabic</option>
+            <option value="Amiri">Amiri (أميري)</option><option value="custom">✏️ خط مخصص</option>
+          </select>
+        </div>
+        <div class="fg" id="custom-font-row" style="display:none"><label>اسم الخط المخصص</label><input id="c-customFontName" placeholder="اسم الخط بالضبط"/></div>
+        <div class="fg"><label>رابط الخط (Google/CDN)</label><input id="c-fontUrl" placeholder="https://fonts.googleapis.com/..."/></div>
+        <div class="fg"><label>حجم خط الرسائل (px)</label><input id="c-chatFontSize" type="number" value="15" min="10" max="30" oninput="previewFont()"/></div>
+        <div class="fg"><label>حجم خط الأسماء (px)</label><input id="c-nameFontSize" type="number" value="13" min="10" max="25"/></div>
+      </div>
+      <div id="font-preview" style="padding:12px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;font-size:17px;direction:rtl;margin-bottom:12px;">
+        مرحباً! هذا معاينة الخط. اكتب وارسل رسائل في الشات هكذا.
+      </div>
+      <button class="btn btn-ok" onclick="saveKeys(['chatFont','chatFontSize','nameFontSize','fontUrl'])">💾 حفظ الخطوط</button>
+    </div>
+  </div>
+
+  <!-- ══ LAYOUTS ══ -->
+  <div class="pg" id="pg-layouts">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🖼️ أشكال الواجهة</div></div>
+      <div id="layouts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ UI ICONS ══ -->
+  <div class="pg" id="pg-ui-icons">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🔘 أيقونات الواجهة</div></div>
+      <p style="font-size:11px;color:var(--txm);margin-bottom:12px;">غيّر أيقونة أي زر أو عنصر في الواجهة. يمكنك استخدام إيموجي أو رفع صورة من جهازك.</p>
+      <div id="ui-icons-list"></div>
+    </div>
+  </div>
+
+  <!-- ══ CUSTOM CSS ══ -->
+  <div class="pg" id="pg-custom-css">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">💻 CSS مخصص - تحكم كامل في المظهر</div></div>
+      <p style="font-size:11px;color:var(--txm);margin-bottom:10px;">اكتب أي كود CSS وسيُطبق فوراً على الموقع. يمكنك تخصيص أي عنصر.</p>
+      <textarea class="code-ed" id="c-customCss" placeholder="/* مثال */
+.msg-bubble { border-radius: 20px !important; }
+#hdr { background: linear-gradient(135deg,#100030,#000) !important; }
+.room-item.active { background: rgba(245,158,11,.2) !important; }"></textarea>
+      <div style="display:flex;gap:7px;margin-top:9px;">
+        <button class="btn btn-ok" onclick="saveKeys(['customCss'])">💾 حفظ وتطبيق</button>
+        <button class="btn btn-s" onclick="document.getElementById('c-customCss').value=''">🗑️ مسح</button>
+        <button class="btn btn-s" onclick="previewCss()">👁️ معاينة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROOMS ══ -->
+  <div class="pg" id="pg-rooms">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">➕ إضافة غرفة جديدة</div></div>
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="switchRoomTab('basic',this)">أساسي</button>
+        <button class="inner-tab" onclick="switchRoomTab('access',this)">الوصول</button>
+        <button class="inner-tab" onclick="switchRoomTab('appearance',this)">المظهر</button>
+        <button class="inner-tab" onclick="switchRoomTab('voice',this)">الصوت</button>
+      </div>
+      <div id="room-tab-basic">
+        <div class="fr">
+          <div class="fg"><label>معرف الغرفة (إنجليزي)</label><input id="nr-id" placeholder="general, vip, sports..."/></div>
+          <div class="fg"><label>الاسم العربي</label><input id="nr-name" placeholder="الغرفة الرئيسية"/></div>
+          <div class="fg"><label>الإيموجي</label><input id="nr-icon" value="💬"/></div>
+          <div class="fg"><label>أو رفع أيقونة</label><input type="file" id="nr-icon-file" accept="image/*" style="font-size:11px;" onchange="uploadRoomIcon(this)"/><input type="hidden" id="nr-icon-url"/></div>
+          <div class="fg"><label>الوصف</label><input id="nr-desc" placeholder="وصف قصير..."/></div>
+          <div class="fg"><label>التصنيف</label><input id="nr-category" placeholder="عام" value="عام"/></div>
+          <div class="fg"><label>الترتيب</label><input id="nr-order" type="number" value="0" min="0"/></div>
+          <div class="fg"><label>كلمة مرور الغرفة (اختياري)</label><input id="nr-password" type="password" placeholder="فارغ = بدون كلمة مرور"/></div>
+        </div>
+        <div class="fg"><label>رسالة ترحيب</label><textarea id="nr-welcome" placeholder="مرحباً بك في الغرفة! قرأ القواعد أولاً..."></textarea></div>
+        <div class="fg"><label>موضوع الغرفة (Topic)</label><input id="nr-topic" placeholder="اليوم نتحدث عن..."/></div>
+        <div class="fg"><label>القواعد</label><textarea id="nr-rules" placeholder="1- الاحترام المتبادل&#10;2- لا للإزعاج..."></textarea></div>
+      </div>
+      <div id="room-tab-access" style="display:none">
+        <div class="fr">
+          <div class="fg"><label>نوع الغرفة</label>
+            <select id="nr-type"><option value="public">عامة للجميع</option><option value="members">للأعضاء المسجلين</option><option value="vip">VIP مدفوعة</option></select>
+          </div>
+          <div class="fg"><label>أقل مستوى للدخول</label><input id="nr-level" type="number" value="1" min="1"/></div>
+          <div class="fg"><label>أقل اشتراك مطلوب</label>
+            <select id="nr-sub"><option value="free">مجاني</option><option value="silver">فضي</option><option value="gold">ذهبي</option><option value="vip">VIP</option></select>
+          </div>
+          <div class="fg"><label>أقصى عدد مستخدمين (0=لا نهاية)</label><input id="nr-maxusers" type="number" value="0" min="0"/></div>
+        </div>
+        <div class="tog-row"><div class="tog-info"><div class="tog-label">الوضع البطيء (Slow Mode)</div><div class="tog-desc">تأخير بين رسالة ورسالة</div></div><div class="tog" id="t-nr-slow" onclick="this.classList.toggle('on')"></div></div>
+        <div class="fg" style="margin-top:8px"><label>مدة الوضع البطيء (ثانية)</label><input id="nr-slow-sec" type="number" value="5" min="1" max="300"/></div>
+      </div>
+      <div id="room-tab-appearance" style="display:none">
+        <div class="fr">
+          <div class="fg"><label>لون الغرفة</label><input type="color" id="nr-color" value="#7c3aed"/></div>
+          <div class="fg"><label>لون الخلفية</label><input type="color" id="nr-bg-color" value="#0f0f1a"/></div>
+          <div class="fg"><label>صورة خلفية (URL)</label><input id="nr-bg-url" placeholder="https://..."/></div>
+          <div class="fg"><label>أو رفع خلفية</label><input type="file" id="nr-bg-file" accept="image/*" style="font-size:11px;" onchange="uploadRoomBg(this)"/></div>
+          <div class="fg"><label>شفافية الخلفية (0-1)</label><input id="nr-bg-opacity" type="number" value="1" min="0" max="1" step="0.1"/></div>
+          <div class="fg"><label>صوت خلفية الغرفة (URL)</label><input id="nr-bg-sound" placeholder="https://.../ambient.mp3"/></div>
+          <div class="fg"><label>مستوى الصوت (0-1)</label><input id="nr-sound-vol" type="number" value="0.3" min="0" max="1" step="0.1"/></div>
+        </div>
+      </div>
+      <div id="room-tab-voice" style="display:none">
+        <div class="tog-row"><div class="tog-info"><div class="tog-label">تفعيل البث الصوتي</div></div><div class="tog" id="t-nr-voice" onclick="this.classList.toggle('on')"></div></div>
+        <div class="tog-row"><div class="tog-info"><div class="tog-label">غرفة صوتية فقط</div><div class="tog-desc">لا توجد رسائل نصية</div></div><div class="tog" id="t-nr-voice-only" onclick="this.classList.toggle('on')"></div></div>
+        <div class="fg" style="margin-top:8px"><label>رابط بث خارجي (Stream URL)</label><input id="nr-stream" placeholder="https://..."/></div>
+      </div>
+      <button class="btn btn-ok" style="margin-top:12px" onclick="addRoom()">➕ إضافة الغرفة</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">📋 الغرف الحالية</div><button class="btn btn-s btn-sm" onclick="loadRooms()">🔄 تحديث</button></div>
+      <div id="rooms-list-admin"></div>
+    </div>
+  </div>
+
+  <!-- ══ CHAT SETTINGS ══ -->
+  <div class="pg" id="pg-chat-settings">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">⚙️ إعدادات الشات الأساسية</div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح للضيوف بالكتابة</div><div class="tog-desc">المستخدمون غير المسجلين</div></div><div class="tog on" id="t-guestWrite" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">التسجيل مفتوح</div></div><div class="tog on" id="t-openRegister" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">وضع الصيانة</div><div class="tog-desc">يوقف الموقع ويعرض رسالة</div></div><div class="tog" id="t-maintenance" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">إظهار عدد المتصلين</div></div><div class="tog on" id="t-showOnline" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالصور</div></div><div class="tog on" id="t-allowImages" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالفيديو</div></div><div class="tog on" id="t-allowVideos" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالملفات</div></div><div class="tog on" id="t-allowFiles" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالروابط</div><div class="tog-desc">روابط غير محددة في القواعد</div></div><div class="tog on" id="t-allowLinks" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">تضمين يوتيوب داخل الشات</div></div><div class="tog on" id="t-allowYouTube" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">فلترة الكلمات المسيئة</div></div><div class="tog" id="t-wordFilter" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالأسماء المزخرفة</div></div><div class="tog on" id="t-allowFancyNames" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بتغيير اسم المستخدم</div></div><div class="tog on" id="t-allowNameChange" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">السماح بالرسائل الخاصة</div></div><div class="tog on" id="t-allowPrivateMsg" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">حذف الرسائل الخاصة للطرفين</div></div><div class="tog" id="t-pmDeleteBoth" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">تفعيل البث الصوتي</div></div><div class="tog" id="t-voiceActive" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">تفعيل الألعاب</div></div><div class="tog on" id="t-gamesActive" onclick="this.classList.toggle('on')"></div></div>
+      <div class="tog-row"><div class="tog-info"><div class="tog-label">تفعيل الحائط</div></div><div class="tog on" id="t-allowWall" onclick="this.classList.toggle('on')"></div></div>
+      <div class="fr" style="margin-top:14px;">
+        <div class="fg"><label>حد الرسائل في الفترة الزمنية</label><input id="c-msgLimit" type="number" value="30"/></div>
+        <div class="fg"><label>الفترة الزمنية (ثانية)</label><input id="c-msgLimitWindow" type="number" value="60"/></div>
+        <div class="fg"><label>أقصى طول للرسالة</label><input id="c-msgMaxLen" type="number" value="1000"/></div>
+        <div class="fg"><label>عدد الرسائل المحفوظة</label><input id="c-historyLimit" type="number" value="200"/></div>
+        <div class="fg"><label>تحذيرات السبام قبل الكتم</label><input id="c-spamWarnings" type="number" value="3"/></div>
+        <div class="fg"><label>مدة كتم السبام (دقيقة)</label><input id="c-spamMuteMins" type="number" value="5"/></div>
+        <div class="fg"><label>أقل طول لاسم المستخدم</label><input id="c-minNameLength" type="number" value="3"/></div>
+        <div class="fg"><label>أقصى طول لاسم المستخدم</label><input id="c-maxNameLength" type="number" value="30"/></div>
+        <div class="fg"><label>أقصى تغييرات الاسم</label><input id="c-maxNameChanges" type="number" value="3"/></div>
+        <div class="fg"><label>أقصى حجم صورة الشات (MB)</label><input id="c-maxImageMb" type="number" value="5"/></div>
+        <div class="fg"><label>أقصى حجم فيديو الشات (MB)</label><input id="c-maxVideoMb" type="number" value="50"/></div>
+        <div class="fg"><label>أقصى حجم ملف الشات (MB)</label><input id="c-maxFileMb" type="number" value="20"/></div>
+        <div class="fg"><label>أقصى حجم صورة الحائط (MB)</label><input id="c-wallImageSize" type="number" value="10"/></div>
+        <div class="fg"><label>أقصى حجم فيديو الحائط (MB)</label><input id="c-wallVideoSize" type="number" value="100"/></div>
+        <div class="fg"><label>رسالة الصيانة</label><input id="c-maintenanceMsg" placeholder="الموقع تحت الصيانة..."/></div>
+      </div>
+      <div class="fg"><label>الامتدادات المسموح بها للملفات</label><input id="c-allowedExtensions" value="jpg,jpeg,png,gif,webp,mp4,webm,pdf,zip"/></div>
+      <button class="btn btn-ok" style="margin-top:12px" onclick="saveChatSettings()">💾 حفظ كل الإعدادات</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🏆 إعدادات النقاط</div></div>
+      <div class="fr">
+        <div class="fg"><label>نقاط لكل رسالة في الشات</label><input id="c-pointPerMsg" type="number" value="2"/></div>
+        <div class="fg"><label>نقاط لكل إعجاب</label><input id="c-pointPerLike" type="number" value="5"/></div>
+        <div class="fg"><label>نقاط لكل منشور على الحائط</label><input id="c-pointPerPost" type="number" value="10"/></div>
+        <div class="fg"><label>تكلفة إرسال النقاط (خصم من المرسل)</label><input id="c-pointSendCost" type="number" value="150"/></div>
+        <div class="fg"><label>أقل عدد نقاط للإرسال</label><input id="c-pointSendMin" type="number" value="100"/></div>
+      </div>
+      <button class="btn btn-ok" onclick="saveKeys(['pointPerMsg','pointPerLike','pointPerPost','pointSendCost','pointSendMin'])">💾 حفظ النقاط</button>
+    </div>
+  </div>
+
+  <!-- ══ MESSAGES ADMIN ══ -->
+  <div class="pg" id="pg-messages-admin">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">💬 مراقبة الرسائل</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">
+        <input id="msg-q" placeholder="بحث في الرسائل..." class="fg" style="width:auto;flex:1;min-width:150px;background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-size:12px;outline:none;"/>
+        <select id="msg-room-sel" style="background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-size:12px;outline:none;"><option value="">كل الغرف</option></select>
+        <button class="btn btn-p btn-sm" onclick="loadMsgsAdmin()">🔍 بحث</button>
+        <button class="btn btn-dn btn-sm" onclick="if(confirm('مسح كل الرسائل؟'))clearAllMsgs()">🗑️ مسح الكل</button>
+        <button class="btn btn-warn btn-sm" onclick="clearRoomMsgs()">🗑️ مسح غرفة</button>
+      </div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>المستخدم</th><th>الرسالة</th><th>النوع</th><th>الغرفة</th><th>الوقت</th><th>حذف</th></tr></thead><tbody id="msgs-admin-table"></tbody></table></div>
+      <div class="pag" id="msgs-pag"></div>
+    </div>
+  </div>
+
+  <!-- ══ BANNED WORDS ══ -->
+  <div class="pg" id="pg-banned-words">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🚫 إضافة كلمة محظورة</div></div>
+      <div class="fr">
+        <div class="fg"><label>الكلمة</label><input id="bw-word" placeholder="كلمة..."/></div>
+        <div class="fg"><label>البديل</label><input id="bw-rep" value="***" placeholder="***"/></div>
+        <div class="fg"><label>درجة الخطورة (1-3)</label><input id="bw-sev" type="number" value="1" min="1" max="3"/></div>
+      </div>
+      <button class="btn btn-ok" onclick="addBannedWord()">➕ إضافة</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">📋 الكلمات المحظورة</div><button class="btn btn-s btn-sm" onclick="loadBannedWords()">🔄</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>الكلمة</th><th>البديل</th><th>الخطورة</th><th>حذف</th></tr></thead><tbody id="banned-words-table"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══ LINK RULES ══ -->
+  <div class="pg" id="pg-link-rules">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🔗 قواعد الروابط</div></div>
+      <div class="fr">
+        <div class="fg"><label>النمط (Domain أو URL)</label><input id="lr-pattern" placeholder="youtube.com, t.me..."/></div>
+        <div class="fg"><label>النوع</label><select id="lr-type"><option value="allow">مسموح دائماً</option><option value="block">محظور دائماً</option></select></div>
+      </div>
+      <button class="btn btn-ok" onclick="addLinkRule()">➕ إضافة قاعدة</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">📋 القواعد الحالية</div></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>النمط</th><th>النوع</th><th>حذف</th></tr></thead><tbody id="link-rules-table"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══ USERS ══ -->
+  <div class="pg" id="pg-users">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">👥 إدارة المستخدمين</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">
+        <input id="usr-q" placeholder="بحث بالاسم أو البريد..." style="flex:1;min-width:150px;background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-family:Tajawal;font-size:12px;outline:none;"/>
+        <select id="usr-role-filter" style="background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-size:12px;outline:none;">
+          <option value="">كل الأدوار</option><option value="owner">صاحب الموقع</option><option value="admin">أدمن</option><option value="moderator">مشرف</option><option value="user">عضو</option>
+        </select>
+        <select id="usr-sub-filter" style="background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-size:12px;outline:none;">
+          <option value="">كل الاشتراكات</option><option value="free">مجاني</option><option value="silver">فضي</option><option value="gold">ذهبي</option><option value="vip">VIP</option>
+        </select>
+        <button class="btn btn-p btn-sm" onclick="loadUsers(1)">🔍 بحث</button>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>ID</th><th>الاسم</th><th>البريد</th><th>الدور</th><th>النقاط</th><th>الاشتراك</th><th>الحالة</th><th>آخر IP</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+          <tbody id="users-table"></tbody>
+        </table>
+      </div>
+      <div class="pag" id="users-pag"></div>
+    </div>
+  </div>
+
+  <!-- ══ BANS ══ -->
+  <div class="pg" id="pg-bans">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🚫 حظر أو كتم مستخدم</div></div>
+      <div class="inner-tabs">
+        <button class="inner-tab active" onclick="switchBanTab('ban',this)">🚫 حظر</button>
+        <button class="inner-tab" onclick="switchBanTab('mute',this)">🔇 كتم</button>
+        <button class="inner-tab" onclick="switchBanTab('kick',this)">👢 طرد</button>
+      </div>
+      <div id="ban-tab-ban">
+        <div class="fr">
+          <div class="fg"><label>ID أو اسم المستخدم</label><input id="ban-uid" placeholder="رقم ID أو الاسم"/></div>
+          <div class="fg"><label>سبب الحظر</label><input id="ban-reason" placeholder="مخالفة القواعد..."/></div>
+          <div class="fg"><label>مدة الحظر</label>
+            <select id="ban-preset" onchange="applyBanPreset(this.value)">
+              <option value="custom">⏱️ مخصص (أدخل أدناه)</option>
+              <option value="30">30 دقيقة</option><option value="60">ساعة</option><option value="180">3 ساعات</option>
+              <option value="360">6 ساعات</option><option value="720">12 ساعة</option><option value="1440">يوم</option>
+              <option value="4320">3 أيام</option><option value="10080">أسبوع</option><option value="43200">شهر</option>
+              <option value="0">دائم</option>
+            </select>
+          </div>
+        </div>
+        <div class="fr" id="ban-custom-row">
+          <div class="fg"><label>دقائق</label><input id="ban-min" type="number" value="0" min="0"/></div>
+          <div class="fg"><label>ساعات</label><input id="ban-hr" type="number" value="0" min="0"/></div>
+          <div class="fg"><label>أيام</label><input id="ban-day" type="number" value="0" min="0"/></div>
+          <div class="fg"><label>أشهر</label><input id="ban-month" type="number" value="0" min="0"/></div>
+          <div class="fg"><label>سنوات</label><input id="ban-year" type="number" value="0" min="0"/></div>
+        </div>
+        <button class="btn btn-dn" onclick="doBan()">🚫 حظر المستخدم</button>
+      </div>
+      <div id="ban-tab-mute" style="display:none">
+        <div class="fr">
+          <div class="fg"><label>ID أو اسم المستخدم</label><input id="mute-uid" placeholder="رقم ID أو الاسم"/></div>
+          <div class="fg"><label>مدة الكتم (دقيقة)</label><input id="mute-duration" type="number" value="30" min="1"/></div>
+          <div class="fg"><label>السبب</label><input id="mute-reason" placeholder="سبب الكتم..."/></div>
+        </div>
+        <button class="btn btn-warn" onclick="doMute()">🔇 كتم المستخدم</button>
+      </div>
+      <div id="ban-tab-kick" style="display:none">
+        <div class="fr">
+          <div class="fg"><label>ID أو اسم المستخدم</label><input id="kick-uid" placeholder="رقم ID أو الاسم"/></div>
+        </div>
+        <button class="btn btn-s" onclick="doKick()">👢 طرد من الغرفة (بدون حظر)</button>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">📋 المحظورون حالياً</div><button class="btn btn-s btn-sm" onclick="loadBanned()">🔄</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>الاسم</th><th>البريد</th><th>السبب</th><th>حتى</th><th>رفع الحظر</th></tr></thead><tbody id="banned-table"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══ PERMISSIONS ══ -->
+  <div class="pg" id="pg-permissions">
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🔐 تغيير دور مستخدم</div></div>
+      <div class="fr">
+        <div class="fg"><label>ID أو اسم المستخدم</label><input id="perm-uid" placeholder="رقم ID أو الاسم"/></div>
+        <div class="fg"><label>الدور الجديد</label>
+          <select id="perm-role">
+            <option value="guest">ضيف</option><option value="user">عضو عادي</option>
+            <option value="moderator">مشرف</option><option value="admin">أدمن</option>
+            <option value="owner">صاحب الموقع</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-ok" onclick="changeRole()">✅ تغيير الدور</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">✔️ توثيق حساب</div></div>
+      <div class="fr">
+        <div class="fg"><label>ID المستخدم</label><input id="verify-uid" placeholder="رقم ID"/></div>
+        <div class="fg"><label>بادج التوثيق</label><input id="verify-badge" value="✔️" placeholder="✔️ أو 🌟 أو أي رمز"/></div>
+      </div>
+      <button class="btn btn-ok" onclick="verifyUser()">✔️ توثيق</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">⚠️ إعطاء تحذير</div></div>
+      <div class="fr">
+        <div class="fg"><label>ID المستخدم</label><input id="warn-uid" placeholder="رقم ID"/></div>
+        <div class="fg"><label>سبب التحذير</label><input id="warn-reason" placeholder="السبب..."/></div>
+      </div>
+      <button class="btn btn-warn" onclick="warnUser()">⚠️ إرسال تحذير</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🔑 إعادة تعيين كلمة مرور عضو</div></div>
+      <div class="fr">
+        <div class="fg"><label>ID المستخدم</label><input id="resetpass-uid" placeholder="رقم ID"/></div>
+        <div class="fg"><label>كلمة المرور الجديدة</label><input type="password" id="resetpass-new" placeholder="كلمة المرور الجديدة..."/></div>
+      </div>
+      <button class="btn btn-p" onclick="resetUserPass()">🔑 إعادة التعيين</button>
+    </div>
+    <div class="sc">
+      <div class="sc-hd"><div class="sc-hd-left">🎨 تخصيص لون اسم مستخدم</div></div>
+      <div class="fr">
+        <div class="fg"><label>ID المستخدم</label><input id="namecolor-uid" placeholder="رقم ID"/></div>
+        <div class="fg"><label>لون الاسم</label><input type="color" id="namecolor-color" value="#a78bfa"/></div>
+        <div class="fg"><label>تدرج لوني (CSS gradient)</label><input id="namecolor-gradient" placeholder="linear-gradient(90deg,#f00,#00f)"/></div>
+        <div class="fg"><label>تأثير الاسم</label>
+          <select id="namecolor-effect">
+            <option value="none">بدون تأثير</option><option value="glow">توهج (Glow)</option>
+            <option value="rainbow">قوس قزح</option><option value="fire">نار</option><option value="neon">نيون</option>
+          </select>
+        </div>
+      </div>
+      <div id="name-preview-box" class="name-preview">معاينة الاسم هنا</div>
+      <button class="btn btn-ok" style="margin-top:10px" onclick="setNameColor()">💾 تطبيق</button>
+    </div>
+  </div>
+
+  <!-- Placeholder pages that load via admin2.html -->
+  <div class="pg" id="pg-ranks"><div class="sc"><div class="sc-hd"><div class="sc-hd-left">⏳ جاري التحميل...</div></div><div id="ranks-content"></div></div></div>
+  <div class="pg" id="pg-subscriptions"><div class="sc"><div id="subs-content"></div></div></div>
+  <div class="pg" id="pg-default-avatars"><div class="sc"><div id="defav-content"></div></div></div>
+  <div class="pg" id="pg-profile-themes"><div class="sc"><div id="pthemes-content"></div></div></div>
+  <div class="pg" id="pg-bots"><div class="sc"><div id="bots-content"></div></div></div>
+  <div class="pg" id="pg-announcements"><div class="sc"><div id="ann-content"></div></div></div>
+  <div class="pg" id="pg-broadcast"><div class="sc"><div id="broadcast-content"></div></div></div>
+  <div class="pg" id="pg-ads"><div class="sc"><div id="ads-content"></div></div></div>
+  <div class="pg" id="pg-wall-admin"><div class="sc"><div id="wall-content"></div></div></div>
+  <div class="pg" id="pg-reports"><div class="sc"><div id="reports-content"></div></div></div>
+  <div class="pg" id="pg-pages"><div class="sc"><div id="pages-content"></div></div></div>
+  <div class="pg" id="pg-emojis"><div class="sc"><div id="emojis-content"></div></div></div>
+  <div class="pg" id="pg-sounds"><div class="sc"><div id="sounds-content"></div></div></div>
+  <div class="pg" id="pg-radio"><div class="sc"><div id="radio-content"></div></div></div>
+  <div class="pg" id="pg-games-admin"><div class="sc"><div id="games-content"></div></div></div>
+  <div class="pg" id="pg-features"><div class="sc"><div id="features-content"></div></div></div>
+  <div class="pg" id="pg-languages"><div class="sc"><div id="langs-content"></div></div></div>
+  <div class="pg" id="pg-plans"><div class="sc"><div id="plans-content"></div></div></div>
+  <div class="pg" id="pg-payments"><div class="sc"><div id="payments-content"></div></div></div>
+  <div class="pg" id="pg-earnings"><div class="sc"><div id="earnings-content"></div></div></div>
+  <div class="pg" id="pg-activity-log"><div class="sc"><div id="activity-content"></div></div></div>
+  <div class="pg" id="pg-settings"><div class="sc"><div id="settings-content"></div></div></div>
+
+  </div><!-- end pages-wrap -->
+</main>
+
+<!-- Modal -->
+<div class="modal" id="user-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="user-modal-title">تفاصيل المستخدم<button class="modal-close" onclick="closeModal('user-modal')">✕</button></div>
+    <div id="user-modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ADMIN ENGINE - Part 1
+═══════════════════════════════════════════════════════ */
+const token=()=>localStorage.getItem('chat_token');
+let currentAdminPage='dashboard', usersPage=1, msgsPage=1;
+
+async function api(url,body,method='POST'){
+  try{
+    const r=await fetch(url,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token()||'')},body:body?JSON.stringify(body):undefined});
+    return r.json().catch(()=>({error:'parse error'}));
+  }catch(e){return{error:e.message};}
+}
+async function apiFetch(url){
+  try{const r=await fetch(url,{headers:{'Authorization':'Bearer '+(token()||'')}});return r.json();}
+  catch(e){return{error:e.message};}
+}
+async function apiForm(url,form){
+  try{const r=await fetch(url,{method:'POST',headers:{'Authorization':'Bearer '+(token()||'')},body:form});return r.json();}
+  catch(e){return{error:e.message};}
+}
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type==='err'?' err':type==='warn'?' warn':'');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3500);
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(ts){if(!ts)return'-';return new Date(ts>1e10?ts:ts*1000).toLocaleDateString('ar-EG');}
+function fmtDT(ts){if(!ts)return'-';return new Date(ts>1e10?ts:ts*1000).toLocaleString('ar-EG');}
+function isOn(id){return document.getElementById(id)?.classList.contains('on');}
+function setOn(id,v){const el=document.getElementById(id);if(el){v?el.classList.add('on'):el.classList.remove('on');}}
+function gv(id){return document.getElementById(id)?.value??'';}
+function sv(id,v){const el=document.getElementById(id);if(el)el.value=v??'';}
+function openModal(id){document.getElementById(id)?.classList.add('show');}
+function closeModal(id){document.getElementById(id)?.classList.remove('show');}
+
+// ── NAVIGATION ───────────────────────────────────────────
+const pageTitles={
+  dashboard:'لوحة المعلومات','live-monitor':'المراقبة الحية',
+  identity:'هوية الموقع',colors:'الألوان',fonts:'الخطوط',layouts:'أشكال الواجهة',
+  'ui-icons':'أيقونات الواجهة','custom-css':'CSS مخصص',
+  rooms:'الغرف','chat-settings':'إعدادات الشات',
+  'messages-admin':'مراقبة الرسائل','banned-words':'الكلمات المحظورة','link-rules':'قواعد الروابط',
+  users:'المستخدمون',bans:'الحظر والكتم',permissions:'الصلاحيات',
+  ranks:'الرتب',subscriptions:'الاشتراكات','default-avatars':'الصور الافتراضية',
+  'profile-themes':'أشكال الملف الشخصي',bots:'البوتات',
+  announcements:'الإعلانات',broadcast:'إشعار جماعي',ads:'الإعلانات المدفوعة',
+  'wall-admin':'الحائط',reports:'البلاغات',pages:'الصفحات',
+  emojis:'الإيموجي',sounds:'الأصوات',radio:'الراديو','games-admin':'الألعاب',
+  features:'إضافة ميزة',languages:'اللغات',plans:'الباقات',
+  payments:'المدفوعات',earnings:'الأرباح','activity-log':'سجل النشاط',settings:'الإعدادات',
+};
+
+const lazyPages={
+  ranks:loadRanksPage, subscriptions:loadSubsPage, 'default-avatars':loadDefAvatarsPage,
+  'profile-themes':loadProfileThemesPage, bots:loadBotsPage,
+  announcements:loadAnnPage, broadcast:loadBroadcastPage, ads:loadAdsPage,
+  'wall-admin':loadWallAdminPage, reports:loadReportsPage, pages:loadPagesPage,
+  emojis:loadEmojisPage, sounds:loadSoundsPage, radio:loadRadioPage,
+  'games-admin':loadGamesPage, features:loadFeaturesPage, languages:loadLangsPage,
+  plans:loadPlansPage, payments:loadPaymentsPage, earnings:loadEarningsPage,
+  'activity-log':loadActivityPage, settings:loadSettingsPage,
+};
+
+function goto(page){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-it').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('pg-'+page);
+  if(pg) pg.classList.add('active');
+  document.querySelector(`[onclick="goto('${page}')"]`)?.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[page]||page;
+  currentAdminPage=page;
+  if(page==='dashboard'){loadStats();loadDashMsgs();loadDashUsers();}
+  else if(page==='users') loadUsers(1);
+  else if(page==='bans') loadBanned();
+  else if(page==='rooms') loadRooms();
+  else if(page==='messages-admin') loadMsgsAdmin();
+  else if(page==='banned-words') loadBannedWords();
+  else if(page==='link-rules') loadLinkRules();
+  else if(page==='ui-icons') loadUiIcons();
+  else if(page==='layouts') loadLayouts();
+  else if(page==='live-monitor') loadLiveMonitor();
+  else if(lazyPages[page]) lazyPages[page]();
+}
+
+// ── CONFIG ───────────────────────────────────────────────
+async function loadConfig(){
+  const cfg=await apiFetch('/api/config');
+  if(!cfg||cfg.error) return;
+  const fields=['siteName','titleTag','siteDesc','metaKeywords','logoUrl','logoPosition','logoSize','favicon',
+    'googleAnalytics','facebookPixel','copyrightText','copyrightLink','siteWallName','siteWallIcon',
+    'currencySymbol','currencyCode','primaryColor','primaryLight','accentColor','bgColor','surfaceColor',
+    'borderColor','msgBg','msgOwnBg','textColor','chatFont','chatFontSize','nameFontSize','fontUrl',
+    'customCss','msgLimit','msgLimitWindow','msgMaxLen','historyLimit','spamWarnings','spamMuteMins',
+    'minNameLength','maxNameLength','maxNameChanges','maxImageMb','maxVideoMb','maxFileMb','allowedExtensions',
+    'wallImageSize','wallVideoSize','maintenanceMsg','pointPerMsg','pointPerLike','pointPerPost',
+    'pointSendCost','pointSendMin'];
+  fields.forEach(f=>{const el=document.getElementById('c-'+f);if(el&&cfg[f]!==undefined)el.value=cfg[f];});
+  const toggles={guestWrite:'1',openRegister:'1',maintenance:'0',showOnline:'1',allowImages:'1',allowVideos:'1',
+    allowFiles:'1',allowLinks:'1',allowYouTube:'1',wordFilter:'0',allowFancyNames:'1',allowNameChange:'1',
+    allowPrivateMsg:'1',pmDeleteBoth:'0',voiceActive:'0',gamesActive:'1',allowWall:'1'};
+  Object.entries(toggles).forEach(([k,def])=>setOn('t-'+k, (cfg[k]??def)==='1'));
+  buildThemeSwatches();
+}
+
+async function saveKeys(keys){
+  const body={};
+  keys.forEach(k=>{const el=document.getElementById('c-'+k);if(el)body[k]=el.value;});
+  const r=await api('/api/admin/config',body);
+  r.ok?toast('✅ تم الحفظ والتطبيق!'):toast(r.error||'خطأ','err');
+}
+
+async function saveChatSettings(){
+  const body={
+    guestWrite:isOn('t-guestWrite')?'1':'0', openRegister:isOn('t-openRegister')?'1':'0',
+    maintenance:isOn('t-maintenance')?'1':'0', showOnline:isOn('t-showOnline')?'1':'0',
+    allowImages:isOn('t-allowImages')?'1':'0', allowVideos:isOn('t-allowVideos')?'1':'0',
+    allowFiles:isOn('t-allowFiles')?'1':'0', allowLinks:isOn('t-allowLinks')?'1':'0',
+    allowYouTube:isOn('t-allowYouTube')?'1':'0', wordFilter:isOn('t-wordFilter')?'1':'0',
+    allowFancyNames:isOn('t-allowFancyNames')?'1':'0', allowNameChange:isOn('t-allowNameChange')?'1':'0',
+    allowPrivateMsg:isOn('t-allowPrivateMsg')?'1':'0', pmDeleteBoth:isOn('t-pmDeleteBoth')?'1':'0',
+    voiceActive:isOn('t-voiceActive')?'1':'0', gamesActive:isOn('t-gamesActive')?'1':'0',
+    allowWall:isOn('t-allowWall')?'1':'0',
+    msgLimit:gv('c-msgLimit'), msgLimitWindow:gv('c-msgLimitWindow'),
+    msgMaxLen:gv('c-msgMaxLen'), historyLimit:gv('c-historyLimit'),
+    spamWarnings:gv('c-spamWarnings'), spamMuteMins:gv('c-spamMuteMins'),
+    minNameLength:gv('c-minNameLength'), maxNameLength:gv('c-maxNameLength'),
+    maxNameChanges:gv('c-maxNameChanges'), maxImageMb:gv('c-maxImageMb'),
+    maxVideoMb:gv('c-maxVideoMb'), maxFileMb:gv('c-maxFileMb'),
+    allowedExtensions:gv('c-allowedExtensions'), wallImageSize:gv('c-wallImageSize'),
+    wallVideoSize:gv('c-wallVideoSize'), maintenanceMsg:gv('c-maintenanceMsg'),
+  };
+  const r=await api('/api/admin/config',body);
+  r.ok?toast('✅ تم حفظ كل الإعدادات!'):toast(r.error||'خطأ','err');
+}
+
+// ── THEMES ───────────────────────────────────────────────
+const THEMES={
+  '🌑 داكن بنفسجي':{primaryColor:'#7c3aed',primaryLight:'#a78bfa',accentColor:'#f59e0b',bgColor:'#0f0f1a',surfaceColor:'#1a1a2e',borderColor:'#2a2a4a',msgBg:'#1e1e3a',msgOwnBg:'#3b1d8a',textColor:'#e2e8f0'},
+  '🔵 أزرق داكن':{primaryColor:'#2563eb',primaryLight:'#60a5fa',accentColor:'#0ea5e9',bgColor:'#0a0f1a',surfaceColor:'#0f1929',borderColor:'#1e2d45',msgBg:'#111e35',msgOwnBg:'#1d3a6b',textColor:'#e2e8f0'},
+  '🟢 أخضر داكن':{primaryColor:'#16a34a',primaryLight:'#4ade80',accentColor:'#fbbf24',bgColor:'#071a0f',surfaceColor:'#0e2318',borderColor:'#1a3a25',msgBg:'#0f2d1a',msgOwnBg:'#1a4a2b',textColor:'#e2e8f0'},
+  '☀️ فاتح':{primaryColor:'#7c3aed',primaryLight:'#6d28d9',accentColor:'#f59e0b',bgColor:'#f8fafc',surfaceColor:'#ffffff',borderColor:'#e2e8f0',msgBg:'#f1f5f9',msgOwnBg:'#ede9fe',textColor:'#1e293b'},
+  '✨ أسود ذهبي':{primaryColor:'#d97706',primaryLight:'#fbbf24',accentColor:'#f59e0b',bgColor:'#000000',surfaceColor:'#111111',borderColor:'#2a2000',msgBg:'#1a1500',msgOwnBg:'#2d2000',textColor:'#fde68a'},
+  '🌊 محيط':{primaryColor:'#0891b2',primaryLight:'#22d3ee',accentColor:'#06b6d4',bgColor:'#020617',surfaceColor:'#0c1a2e',borderColor:'#164e63',msgBg:'#0c2340',msgOwnBg:'#0e3a5e',textColor:'#e0f2fe'},
+  '🌹 وردي':{primaryColor:'#e11d48',primaryLight:'#fb7185',accentColor:'#f97316',bgColor:'#1a0010',surfaceColor:'#2d001a',borderColor:'#500030',msgBg:'#3d0025',msgOwnBg:'#5c0038',textColor:'#fce7f3'},
+  '🌅 غروب':{primaryColor:'#ea580c',primaryLight:'#fb923c',accentColor:'#eab308',bgColor:'#1a0a00',surfaceColor:'#2d1500',borderColor:'#4a2000',msgBg:'#3d1800',msgOwnBg:'#5c2a00',textColor:'#fed7aa'},
+};
+
+function buildThemeSwatches(){
+  const colors={'🌑 داكن بنفسجي':'#7c3aed','🔵 أزرق داكن':'#2563eb','🟢 أخضر داكن':'#16a34a','☀️ فاتح':'#e2e8f0','✨ أسود ذهبي':'#d97706','🌊 محيط':'#0891b2','🌹 وردي':'#e11d48','🌅 غروب':'#ea580c'};
+  const wrap=document.getElementById('theme-swatches');
+  if(!wrap) return;
+  wrap.innerHTML=Object.entries(colors).map(([name,color])=>`<div class="swatch" style="background:${color}" title="${name}" onclick="applyTheme('${name}')"></div>`).join('');
+}
+
+function applyTheme(name){
+  const t=THEMES[name];
+  if(!t) return;
+  Object.entries(t).forEach(([k,v])=>sv('c-'+k,v));
+  toast(`🎨 ثيم "${name}" جاهز - اضغط حفظ الألوان`,'ok');
+}
+
+// ── FONT PREVIEW ──────────────────────────────────────────
+function previewFont(){
+  const f=gv('c-chatFont'),sz=gv('c-chatFontSize');
+  const prev=document.getElementById('font-preview');
+  if(prev){prev.style.fontFamily=f+',sans-serif';prev.style.fontSize=(sz||15)+'px';}
+  document.getElementById('custom-font-row').style.display=f==='custom'?'grid':'none';
+}
+
+function previewCss(){
+  const css=gv('c-customCss');
+  const win=window.open('/','_blank');
+  win?.addEventListener('load',()=>{const s=win.document.createElement('style');s.textContent=css;win.document.head.appendChild(s);});
+}
+
+// ── STATS ────────────────────────────────────────────────
+async function loadStats(){
+  const s=await apiFetch('/api/admin/stats');
+  if(!s||s.error) return;
+  sv('s-users',s.totalUsers||0);sv('s-online',s.onlineNow||0);sv('s-msgs',s.totalMsgs||0);
+  sv('s-today',s.todayMsgs||0);sv('s-posts',s.totalPosts||0);sv('s-banned',s.bannedCount||0);
+  sv('s-rooms',s.roomCount||0);sv('s-pts',(s.totalPoints||0).toLocaleString('ar-EG'));
+  sv('s-revenue',(s.totalRevenue||0).toFixed(2)+' ج.م');sv('s-reports',s.reportsCount||0);
+  const rb=document.getElementById('reports-badge');
+  if(rb) rb.textContent=s.reportsCount||0;
+}
+
+// ── DASHBOARD TABLES ──────────────────────────────────────
+async function loadDashMsgs(){
+  const data=await apiFetch('/api/admin/messages?limit=8');
+  if(!data||data.error) return;
+  document.getElementById('dash-msgs').innerHTML=(Array.isArray(data)?data:[]).map(m=>`
+    <tr>
+      <td><strong>${esc(m.username)}</strong></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc((m.text||'').substring(0,60))}</td>
+      <td><span class="bdg bdg-user">${esc(m.room_id||'?')}</span></td>
+      <td>${fmtDT(m.created_at)}</td>
+      <td><button class="btn btn-dn btn-sm" onclick="delMsg(${m.id})">🗑️</button></td>
+    </tr>`).join('');
+}
+
+async function loadDashUsers(){
+  const data=await apiFetch('/api/admin/users?limit=8');
+  if(!data||data.error) return;
+  const users=data.users||[];
+  document.getElementById('dash-users').innerHTML=users.slice(0,8).map(u=>`
+    <tr>
+      <td><strong>${esc(u.username)}</strong></td>
+      <td>${roleBadge(u.role)}</td>
+      <td style="color:var(--pl)">${(u.points||0).toLocaleString('ar-EG')}</td>
+      <td>${fmtDate(u.created_at)}</td>
+      <td><button class="btn btn-p btn-sm" onclick="showUserModal(${u.id})">عرض</button></td>
+    </tr>`).join('');
+}
+
+// ── ROOMS ────────────────────────────────────────────────
+function switchRoomTab(tab, btn){
+  ['basic','access','appearance','voice'].forEach(t=>{
+    document.getElementById('room-tab-'+t).style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+async function uploadRoomIcon(inp){
+  const form=new FormData();form.append('icon',inp.files[0]);
+  const r=await apiForm('/api/admin/rooms/upload-icon',form);
+  if(r.url){sv('nr-icon-url',r.url);toast('✅ تم رفع الأيقونة');}
+}
+
+async function uploadRoomBg(inp){
+  toast('جاري الرفع...','ok');
+}
+
+async function addRoom(){
+  const room_id=gv('nr-id').trim(),name=gv('nr-name').trim();
+  if(!room_id||!name){toast('أدخل المعرف والاسم!','err');return;}
+  const r=await api('/api/admin/rooms',{
+    room_id,name,icon:gv('nr-icon')||'💬',icon_url:gv('nr-icon-url'),
+    description:gv('nr-desc'),category:gv('nr-category')||'عام',
+    order_n:parseInt(gv('nr-order'))||0,type:gv('nr-type'),
+    min_level:parseInt(gv('nr-level'))||1,min_sub:gv('nr-sub'),
+    max_users:parseInt(gv('nr-maxusers'))||0,password:gv('nr-password'),
+    welcome_msg:gv('nr-welcome'),topic:gv('nr-topic'),rules:gv('nr-rules'),
+    slow_mode:isOn('t-nr-slow')?1:0,slow_seconds:parseInt(gv('nr-slow-sec'))||5,
+    voice_enabled:isOn('t-nr-voice')?1:0,is_voice_only:isOn('t-nr-voice-only')?1:0,
+    stream_url:gv('nr-stream'),color:gv('nr-color'),bg_color:gv('nr-bg-color'),
+    bg_image:gv('nr-bg-url'),bg_opacity:parseFloat(gv('nr-bg-opacity'))||1,
+    bg_sound:gv('nr-bg-sound'),bg_sound_vol:parseFloat(gv('nr-sound-vol'))||0.3,
+  });
+  r.ok?(toast('✅ تمت إضافة الغرفة!'),loadRooms()):toast(r.error||'خطأ','err');
+}
+
+async function loadRooms(){
+  const rooms=await apiFetch('/api/admin/rooms');
+  if(!rooms||rooms.error) return;
+  const sel=document.getElementById('msg-room-sel');
+  if(sel){sel.innerHTML='<option value="">كل الغرف</option>'+rooms.map(r=>`<option value="${r.room_id}">${r.name}</option>`).join('');}
+  const list=document.getElementById('rooms-list-admin');
+  if(!list) return;
+  list.innerHTML=rooms.map(r=>`
+    <div class="item-card">
+      <div class="ic-icon">${r.icon_url?`<img src="${r.icon_url}"/>`:(r.icon||'💬')}</div>
+      <div class="ic-info">
+        <div class="ic-name">${esc(r.name)} <small style="color:var(--txm)">(${r.room_id})</small></div>
+        <div class="ic-sub">${esc(r.description||'')} | ${r.type||'public'} | مستوى ${r.min_level||1}+ | ترتيب: ${r.order_n||0}${r.voice_enabled?` | 🎤 صوتي`:''}</div>
+      </div>
+      <div class="ic-actions">
+        <div class="tog ${r.is_active?'on':''}" title="تفعيل/إيقاف" onclick="toggleRoom(${r.id},this)"></div>
+        <button class="btn btn-dn btn-sm" onclick="delRoom(${r.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+async function toggleRoom(id,el){
+  el.classList.toggle('on');
+  await api('/api/admin/rooms/'+id,{is_active:el.classList.contains('on')?1:0},'PUT');
+}
+async function delRoom(id){
+  if(!confirm('حذف الغرفة؟')) return;
+  const r=await fetch('/api/admin/rooms/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token()}});
+  const d=await r.json();
+  d.ok?(toast('✅ تم الحذف'),loadRooms()):toast(d.error,'err');
+}
+
+// ── MESSAGES ─────────────────────────────────────────────
+async function loadMsgsAdmin(page=1){
+  msgsPage=page;
+  const q=gv('msg-q'),room=gv('msg-room-sel');
+  let url=`/api/admin/messages?limit=50&offset=${(page-1)*50}`;
+  if(q) url+='&search='+encodeURIComponent(q);
+  if(room) url+='&room='+encodeURIComponent(room);
+  const data=await apiFetch(url);
+  if(!data||data.error) return;
+  document.getElementById('msgs-admin-table').innerHTML=(Array.isArray(data)?data:[]).map(m=>`
+    <tr>
+      <td><strong>${esc(m.username)}</strong></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc((m.text||'').substring(0,80))}</td>
+      <td><span class="bdg bdg-user">${m.type||'text'}</span></td>
+      <td>${esc(m.room_id||'?')}</td>
+      <td>${fmtDT(m.created_at)}</td>
+      <td><button class="btn btn-dn btn-sm" onclick="delMsg(${m.id})">🗑️</button></td>
+    </tr>`).join('');
+}
+
+async function delMsg(id){
+  const r=await fetch('/api/admin/messages/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token()}});
+  const d=await r.json();
+  d.ok?(toast('✅ تم الحذف'),loadMsgsAdmin()):toast(d.error,'err');
+}
+
+async function clearAllMsgs(){
+  await api('/api/admin/messages/clear',{});
+  toast('✅ تم مسح كل الرسائل!');
+  loadMsgsAdmin();
+}
+
+async function clearRoomMsgs(){
+  const room=gv('msg-room-sel');
+  if(!room){toast('اختر غرفة أولاً','err');return;}
+  if(!confirm(`مسح رسائل ${room}؟`)) return;
+  await api('/api/admin/messages/clear',{room});
+  toast('✅ تم مسح رسائل الغرفة!');
+  loadMsgsAdmin();
+}
+
+// ── USERS ────────────────────────────────────────────────
+async function loadUsers(page=1){
+  usersPage=page;
+  const q=gv('usr-q'),role=gv('usr-role-filter'),sub=gv('usr-sub-filter');
+  let url=`/api/admin/users?page=${page}`;
+  if(q) url+='&search='+encodeURIComponent(q);
+  if(role) url+='&role='+role;
+  if(sub) url+='&subscription='+sub;
+  const data=await apiFetch(url);
+  if(!data||data.error) return;
+  const users=data.users||data;
+  const total=data.total||users.length;
+  const pages=Math.ceil(total/50);
+
+  document.getElementById('users-table').innerHTML=users.map(u=>`
+    <tr>
+      <td><span class="bdg bdg-user">#${u.id}</span></td>
+      <td><strong style="cursor:pointer;color:var(--pl)" onclick="showUserModal(${u.id})">${esc(u.username)}</strong>${u.is_online?'<span style="color:var(--ok);font-size:10px;margin-right:4px">●</span>':''}</td>
+      <td style="font-size:10px;color:var(--txm)">${esc(u.email||'-')}</td>
+      <td>${roleBadge(u.role)}</td>
+      <td style="color:var(--pl);font-size:11px">${(u.points||0).toLocaleString('ar-EG')}</td>
+      <td><span class="bdg bdg-${u.subscription||'free'}">${u.subscription||'free'}</span></td>
+      <td>${u.is_banned?'<span class="bdg bdg-banned">محظور</span>':'<span class="bdg bdg-ok">نشط</span>'}</td>
+      <td style="font-size:10px;color:var(--txm)">${esc(u.last_ip||'-')}</td>
+      <td style="font-size:10px;color:var(--txm)">${fmtDate(u.created_at)}</td>
+      <td>
+        <div class="tbl-actions">
+          <button class="btn btn-p btn-sm" onclick="showUserModal(${u.id})">👤</button>
+          <button class="btn btn-dn btn-sm" onclick="quickBanUser(${u.id},'${esc(u.username)}')">🚫</button>
+          <button class="btn btn-s btn-sm" onclick="quickKick(${u.id})">👢</button>
+          ${u.is_banned?`<button class="btn btn-ok btn-sm" onclick="unbanUser(${u.id})">✅</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+
+  const pag=document.getElementById('users-pag');
+  if(pag&&pages>1){
+    pag.innerHTML=Array.from({length:Math.min(pages,10)},(_,i)=>`<button class="pag-btn${i+1===page?' active':''}" onclick="loadUsers(${i+1})">${i+1}</button>`).join('')+
+      (pages>10?`<span style="color:var(--txm);font-size:11px"> ... ${total} مستخدم إجمالاً</span>`:'');
+  }
+}
+
+async function showUserModal(userId){
+  openModal('user-modal');
+  document.getElementById('user-modal-body').innerHTML='<div style="text-align:center;padding:20px;color:var(--txm)">⏳ جاري التحميل...</div>';
+  const u=await apiFetch('/api/admin/users?search=');
+  // Load single user details via another route
+  const all=await apiFetch('/api/admin/users?search=');
+  const userData=(all.users||[]).find(x=>x.id===userId);
+  if(!userData){document.getElementById('user-modal-body').innerHTML='<p style="color:var(--txm)">لم يتم العثور على المستخدم</p>';return;}
+
+  document.getElementById('user-modal-title').textContent=`👤 ${userData.username} #${userData.id}`;
+
+  // Detect multi-accounts
+  let deviceIds=[];
+  try{deviceIds=JSON.parse(userData.device_ids||'[]');}catch{}
+
+  document.getElementById('user-modal-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:14px;">
+      <div><span style="color:var(--txm)">الدور:</span> ${roleBadge(userData.role)}</div>
+      <div><span style="color:var(--txm)">الاشتراك:</span> <span class="bdg bdg-${userData.subscription||'free'}">${userData.subscription||'free'}</span></div>
+      <div><span style="color:var(--txm)">النقاط:</span> <strong style="color:var(--pl)">${(userData.points||0).toLocaleString('ar-EG')}</strong></div>
+      <div><span style="color:var(--txm)">الرتبة:</span> ${esc(userData.rank_title||'-')}</div>
+      <div><span style="color:var(--txm)">التحذيرات:</span> ${userData.warn_count||0}</div>
+      <div><span style="color:var(--txm)">الرسائل:</span> ${userData.msg_count||0}</div>
+      <div><span style="color:var(--txm)">آخر IP:</span> ${esc(userData.last_ip||'-')}</div>
+      <div><span style="color:var(--txm)">تغييرات الاسم:</span> ${userData.name_changes||0}</div>
+      <div><span style="color:var(--txm)">انضم:</span> ${fmtDate(userData.created_at)}</div>
+      <div><span style="color:var(--txm)">آخر ظهور:</span> ${fmtDT(userData.last_seen)}</div>
+    </div>
+    <div style="font-size:11px;color:var(--txm);margin-bottom:12px;">
+      <div style="margin-bottom:4px">كلمة المرور: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:11px">${esc(userData.password_plain||'(مخفية)')}</code></div>
+      <div>الأجهزة المرتبطة (${deviceIds.length}): ${deviceIds.map(ip=>`<span style="background:var(--bg);padding:1px 5px;border-radius:4px;font-size:10px;margin-left:3px">${esc(ip)}</span>`).join('')}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;">
+      <button class="btn btn-dn btn-sm" onclick="quickBanUser(${userData.id},'${esc(userData.username)}')">🚫 حظر</button>
+      ${userData.is_banned?`<button class="btn btn-ok btn-sm" onclick="unbanUser(${userData.id})">✅ رفع الحظر</button>`:''}
+      <button class="btn btn-warn btn-sm" onclick="quickMuteUser(${userData.id})">🔇 كتم</button>
+      <button class="btn btn-s btn-sm" onclick="quickKick(${userData.id})">👢 طرد</button>
+      <button class="btn btn-p btn-sm" onclick="quickAddPoints(${userData.id},'${esc(userData.username)}')">+نقاط</button>
+      <button class="btn btn-p btn-sm" onclick="quickChangeSub(${userData.id})">💎 اشتراك</button>
+      <button class="btn btn-warn btn-sm" onclick="quickWarn(${userData.id})">⚠️ تحذير</button>
+      <button class="btn btn-dn btn-sm" onclick="if(confirm('حذف المستخدم نهائياً؟'))deleteUser(${userData.id})">🗑️ حذف نهائي</button>
+    </div>`;
+}
+
+async function quickBanUser(id,name){
+  const mins=prompt(`حظر ${name} كم دقيقة؟ (0=دائم)`,1440);
+  if(mins===null) return;
+  const r=await api('/api/admin/users/ban',{userId:id,reason:'بقرار الأدمن',duration:parseInt(mins)});
+  r.ok?(toast(`🚫 تم حظر ${name}`),loadUsers(usersPage)):toast(r.error,'err');
+}
+async function unbanUser(id){
+  const r=await api('/api/admin/users/unban',{userId:id});
+  r.ok?(toast('✅ رُفع الحظر'),loadUsers(usersPage)):toast(r.error,'err');
+}
+async function quickKick(id){
+  await api('/api/admin/users/kick',{userId:id});
+  toast('👢 تم الطرد');
+}
+async function quickMuteUser(id){
+  const mins=prompt('كتم كم دقيقة؟',30);
+  if(!mins) return;
+  await api('/api/admin/users/mute',{userId:id,duration:parseInt(mins)});
+  toast('🔇 تم الكتم');
+}
+async function quickAddPoints(id,name){
+  const pts=parseInt(prompt(`كم نقطة تضيف لـ ${name}?`));
+  if(!pts) return;
+  await api('/api/admin/users/points',{userId:id,amount:pts,reason:'منحة أدمن'});
+  toast(`✅ أضفت ${pts} نقطة`);loadUsers(usersPage);
+}
+async function quickChangeSub(id){
+  const t=prompt('نوع الاشتراك: free, silver, gold, vip, unlimited');
+  if(!t) return;
+  const d=prompt('عدد الأيام:',30);
+  await api('/api/admin/users/subscription',{userId:id,type:t,days:parseInt(d)||30});
+  toast('✅ تم تحديث الاشتراك');loadUsers(usersPage);
+}
+async function quickWarn(id){
+  const reason=prompt('سبب التحذير:');
+  await api('/api/admin/users/warn',{userId:id,reason:reason||''});
+  toast('⚠️ تم إرسال التحذير');
+}
+async function deleteUser(id){
+  const r=await fetch('/api/admin/users/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token()}});
+  const d=await r.json();
+  d.ok?(toast('✅ تم الحذف'),loadUsers(usersPage),closeModal('user-modal')):toast(d.error,'err');
+}
+
+// ── BANS ─────────────────────────────────────────────────
+function switchBanTab(tab,btn){
+  ['ban','mute','kick'].forEach(t=>document.getElementById('ban-tab-'+t).style.display=t===tab?'block':'none');
+  document.querySelectorAll('.inner-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function applyBanPreset(val){
+  if(val!=='custom'){
+    sv('ban-min',0);sv('ban-hr',0);sv('ban-day',0);sv('ban-month',0);sv('ban-year',0);
+    document.getElementById('ban-custom-row').style.opacity='.4';
+  } else document.getElementById('ban-custom-row').style.opacity='1';
+}
+
+async function doBan(){
+  const uid=gv('ban-uid'),reason=gv('ban-reason');
+  if(!uid){toast('أدخل ID أو اسم المستخدم','err');return;}
+  const preset=gv('ban-preset');
+  let duration=0;
+  if(preset==='custom'){
+    duration=parseInt(gv('ban-min'))||0;
+    duration+=(parseInt(gv('ban-hr'))||0)*60;
+    duration+=(parseInt(gv('ban-day'))||0)*1440;
+    duration+=(parseInt(gv('ban-month'))||0)*43200;
+    duration+=(parseInt(gv('ban-year'))||0)*525600;
+  } else duration=parseInt(preset)||0;
+  const r=await api('/api/admin/users/ban',{userId:parseInt(uid)||uid,reason:reason||'مخالفة القواعد',duration});
+  r.ok?(toast('🚫 تم الحظر!'),loadBanned()):toast(r.error||'تأكد من ID/اسم المستخدم','err');
+}
+
+async function doMute(){
+  const uid=gv('mute-uid'),dur=parseInt(gv('mute-duration'))||30;
+  if(!uid){toast('أدخل ID أو اسم','err');return;}
+  await api('/api/admin/users/mute',{userId:parseInt(uid)||uid,duration:dur});
+  toast('🔇 تم الكتم!');
+}
+
+async function doKick(){
+  const uid=gv('kick-uid');
+  if(!uid){toast('أدخل ID أو اسم','err');return;}
+  await api('/api/admin/users/kick',{userId:parseInt(uid)||uid});
+  toast('👢 تم الطرد!');
+}
+
+async function loadBanned(){
+  const data=await apiFetch('/api/admin/users?banned=1');
+  if(!data) return;
+  const users=(data.users||[]).filter(u=>u.is_banned);
+  document.getElementById('banned-table').innerHTML=users.length?users.map(u=>`
+    <tr>
+      <td><strong>${esc(u.username)}</strong></td>
+      <td style="font-size:10px;color:var(--txm)">${esc(u.email||'-')}</td>
+      <td>${esc(u.ban_reason||'-')}</td>
+      <td>${u.ban_until===0?'<span class="bdg bdg-banned">دائم</span>':fmtDT(u.ban_until)}</td>
+      <td><button class="btn btn-ok btn-sm" onclick="unbanUser(${u.id})">✅ رفع الحظر</button></td>
+    </tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--txm);padding:14px">لا يوجد محظورون</td></tr>';
+}
+
+// ── PERMISSIONS ───────────────────────────────────────────
+async function changeRole(){
+  const uid=gv('perm-uid'),role=gv('perm-role');
+  if(!uid){toast('أدخل ID أو اسم','err');return;}
+  const r=await api('/api/admin/users/role',{userId:parseInt(uid)||uid,role});
+  r.ok?toast('✅ تم تغيير الدور'):toast(r.error,'err');
+}
+
+async function verifyUser(){
+  const uid=gv('verify-uid'),badge=gv('verify-badge')||'✔️';
+  if(!uid){toast('أدخل ID','err');return;}
+  const r=await api('/api/admin/users/verify',{userId:parseInt(uid)||uid,badge});
+  r.ok?toast('✔️ تم التوثيق'):toast(r.error,'err');
+}
+
+async function warnUser(){
+  const uid=gv('warn-uid'),reason=gv('warn-reason');
+  if(!uid){toast('أدخل ID','err');return;}
+  const r=await api('/api/admin/users/warn',{userId:parseInt(uid)||uid,reason});
+  r.ok?toast('⚠️ تم إرسال التحذير'):toast(r.error,'err');
+}
+
+async function resetUserPass(){
+  const uid=gv('resetpass-uid'),np=gv('resetpass-new');
+  if(!uid||!np){toast('أدخل البيانات','err');return;}
+  const r=await api('/api/admin/users/reset-password',{userId:parseInt(uid)||uid,newPassword:np});
+  r.ok?toast('🔑 تم إعادة التعيين'):toast(r.error,'err');
+}
+
+async function setNameColor(){
+  const uid=gv('namecolor-uid');
+  if(!uid){toast('أدخل ID','err');return;}
+  const nameColor=gv('namecolor-color'),nameGradient=gv('namecolor-gradient'),nameEffect=gv('namecolor-effect');
+  const prev=document.getElementById('name-preview-box');
+  if(prev){
+    prev.style.color=nameColor;
+    if(nameGradient){prev.style.background=nameGradient;prev.style.webkitBackgroundClip='text';prev.style.webkitTextFillColor='transparent';}
+    else{prev.style.background='';prev.style.webkitTextFillColor='';}
+  }
+  const r=await api('/api/admin/users/set-namecolor',{userId:parseInt(uid)||uid,nameColor,nameGradient,nameEffect});
+  r.ok?toast('✅ تم تطبيق لون الاسم'):toast(r.error,'err');
+}
+
+// ── BANNED WORDS ──────────────────────────────────────────
+async function addBannedWord(){
+  const word=gv('bw-word').trim();
+  if(!word){toast('أدخل الكلمة','err');return;}
+  const r=await api('/api/admin/banned-words',{word,replacement:gv('bw-rep')||'***',severity:parseInt(gv('bw-sev'))||1});
+  r.ok?(toast('✅ تمت الإضافة'),loadBannedWords(),sv('bw-word','')):toast(r.error,'err');
+}
+
+async function loadBannedWords(){
+  const data=await apiFetch('/api/admin/banned-words');
+  if(!data||data.error) return;
+  document.getElementById('banned-words-table').innerHTML=data.length?data.map(w=>`
+    <tr>
+      <td><code style="background:var(--bg);padding:2px 6px;border-radius:4px">${esc(w.word)}</code></td>
+      <td>${esc(w.replacement)}</td>
+      <td><span class="bdg bdg-${w.severity>=3?'banned':w.severity>=2?'warn':'user'}">${w.severity}</span></td>
+      <td><button class="btn btn-dn btn-sm" onclick="delBannedWord(${w.id})">🗑️</button></td>
+    </tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--txm)">لا يوجد كلمات محظورة</td></tr>';
+}
+
+async function delBannedWord(id){
+  await fetch('/api/admin/banned-words/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token()}});
+  toast('✅ تم الحذف');loadBannedWords();
+}
+
+// ── LINK RULES ────────────────────────────────────────────
+async function addLinkRule(){
+  const p=gv('lr-pattern').trim();
+  if(!p){toast('أدخل النمط','err');return;}
+  await api('/api/admin/link-rules',{pattern:p,type:gv('lr-type')});
+  toast('✅ تمت الإضافة');loadLinkRules();sv('lr-pattern','');
+}
+
+async function loadLinkRules(){
+  const data=await apiFetch('/api/admin/link-rules');
+  if(!data||data.error) return;
+  document.getElementById('link-rules-table').innerHTML=data.length?data.map(r=>`
+    <tr>
+      <td><code style="background:var(--bg);padding:2px 6px;border-radius:4px">${esc(r.pattern)}</code></td>
+      <td><span class="bdg ${r.type==='allow'?'bdg-ok':'bdg-banned'}">${r.type==='allow'?'✅ مسموح':'🚫 محظور'}</span></td>
+      <td><button class="btn btn-dn btn-sm" onclick="delLinkRule(${r.id})">🗑️</button></td>
+    </tr>`).join(''):'<tr><td colspan="3" style="text-align:center;color:var(--txm)">لا توجد قواعد</td></tr>';
+}
+
+async function delLinkRule(id){
+  await fetch('/api/admin/link-rules/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token()}});
+  toast('✅ تم الحذف');loadLinkRules();
+}
+
+// ── UI ICONS ──────────────────────────────────────────────
+async function loadUiIcons(){
+  const data=await apiFetch('/api/admin/ui-icons');
+  if(!data||data.error) return;
+  const list=document.getElementById('ui-icons-list');
+  list.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;">'+
+    data.map(ic=>`
+      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:11px;">
+        <div style="font-size:11px;font-weight:700;color:var(--pl);margin-bottom:8px;">${esc(ic.label||ic.key)}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:7px;">
+          <span style="font-size:20px;">${ic.icon_type==='file'&&ic.url?`<img src="${ic.url}" style="width:24px;height:24px;border-radius:4px;object-fit:cover;"/>`:esc(ic.value||'?')}</span>
+          <span style="font-size:11px;color:var(--txm)">${esc(ic.key)}</span>
+        </div>
+        <input type="text" value="${esc(ic.value||'')}" placeholder="إيموجي أو نص..." style="width:100%;background:var(--sf);border:1px solid var(--bd);border-radius:6px;padding:5px 8px;color:var(--tx);font-size:12px;outline:none;margin-bottom:5px;" id="ic-val-${ic.key}"/>
+        <input type="file" accept="image/*" style="font-size:10px;width:100%" onchange="uploadIconFile('${ic.key}',this)"/>
+        <div style="display:flex;gap:5px;margin-top:7px;">
+          <button class="btn btn-ok btn-sm" onclick="saveIconText('${ic.key}')">💾</button>
+          <div class="tog ${ic.visible?'on':''}" onclick="toggleIconVisible('${ic.key}',this)" title="إظهار/إخفاء"></div>
+        </div>
+      </div>`).join('')+'</div>';
+}
+
+async function saveIconText(key){
+  const val=gv('ic-val-'+key);
+  await api('/api/admin/ui-icons/'+key,{value:val,icon_type:'emoji',label:key});
+  toast('✅ تم');loadUiIcons();
+}
+
+async function uploadIconFile(key,inp){
+  const form=new FormData();form.append('icon',inp.files[0]);
+  const r=await apiForm('/api/admin/ui-icons/'+key+'/upload',form);
+  r.ok?(toast('✅ تم رفع الأيقونة'),loadUiIcons()):toast(r.error,'err');
+}
+
+async function toggleIconVisible(key,el){
+  el.classList.toggle('on');
+  await api('/api/admin/ui-icons/'+key,{visible:el.classList.contains('on')?1:0});
+}
+
+// ── LAYOUTS ──────────────────────────────────────────────
+async function loadLayouts(){
+  const data=await apiFetch('/api/admin/layouts');
+  if(!data||data.error) return;
+  document.getElementById('layouts-grid').innerHTML=data.map(l=>`
+    <div style="background:var(--bg);border:${l.is_active?'2px solid var(--p)':'1px solid var(--bd)'};border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;" onclick="activateLayout('${l.name}')">
+      <div style="font-size:30px;margin-bottom:8px">🖥️</div>
+      <div style="font-size:13px;font-weight:700;">${esc(l.label||l.name)}</div>
+      ${l.is_active?'<div style="font-size:11px;color:var(--ok);margin-top:4px">✅ مفعّل حالياً</div>':'<div style="font-size:11px;color:var(--txm);margin-top:4px">اضغط للتفعيل</div>'}
+    </div>`).join('');
+}
+
+async function activateLayout(name){
+  await api('/api/admin/layouts/activate',{name});
+  toast('✅ تم تفعيل الشكل: '+name);
+  loadLayouts();
+}
+
+// ── LIVE MONITOR ─────────────────────────────────────────
+async function loadLiveMonitor(){
+  const rooms=await apiFetch('/api/chat/rooms');
+  if(!rooms) return;
+  document.getElementById('live-rooms-grid').innerHTML=(Array.isArray(rooms)?rooms:[]).map(r=>`
+    <div style="background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:14px;">
+      <div style="font-size:20px;margin-bottom:5px">${r.icon||'💬'}</div>
+      <div style="font-size:13px;font-weight:700">${esc(r.name)}</div>
+      <div style="font-size:11px;color:var(--ok);margin-top:4px">🟢 ${r.online_count||0} متصل</div>
+      <div style="margin-top:8px;display:flex;gap:5px;">
+        <button class="btn btn-dn btn-sm" onclick="if(confirm('مسح رسائل ${esc(r.name)}؟'))apiAndRefresh('/api/admin/messages/clear',{room:'${r.room_id}'})">🗑️</button>
+        <button class="btn btn-s btn-sm" onclick="goto('messages-admin');document.getElementById('msg-room-sel').value='${r.room_id}';loadMsgsAdmin()">👁️</button>
+      </div>
+    </div>`).join('');
+  setTimeout(loadLiveMonitor, 15000);
+}
+
+async function apiAndRefresh(url,body){
+  await api(url,body);toast('✅ تم');
+}
+
+// ── LOGO / FAVICON UPLOAD ─────────────────────────────────
+async function uploadLogoFile(inp){
+  const form=new FormData();form.append('file',inp.files[0]);
+  // Use as base64 preview
+  const reader=new FileReader();
+  reader.onload=e=>{sv('c-logoUrl',e.target.result);toast('✅ تم تحميل الشعار (حفظ لتطبيق)');};
+  reader.readAsDataURL(inp.files[0]);
+}
+async function uploadFaviconFile(inp){
+  const reader=new FileReader();
+  reader.onload=e=>{sv('c-favicon',e.target.result);toast('✅ تم تحميل الفافيكون');};
+  reader.readAsDataURL(inp.files[0]);
+}
+
+// ── HELPERS ──────────────────────────────────────────────
+function roleBadge(r){
+  const map={owner:'bdg-owner',admin:'bdg-admin',moderator:'bdg-mod',user:'bdg-user',guest:'bdg-guest'};
+  const names={owner:'👑 صاحب الموقع',admin:'⚙️ أدمن',moderator:'🛡️ مشرف',user:'👤 عضو',guest:'👁️ ضيف'};
+  return `<span class="bdg ${map[r]||'bdg-user'}">${names[r]||r}</span>`;
+}
+
+function logout(){
+  localStorage.removeItem('chat_token');
+  localStorage.removeItem('chat_user');
+  location.href='/';
+}
+
+// ── LAZY PAGES (called when tab opened) ──────────────────
+// All loaded from admin2.html JS via window scope
+function loadRanksPage(){if(window.loadRanks)loadRanks();else loadAdmin2Module('ranks');}
+function loadSubsPage(){if(window.loadSubs)loadSubs();else loadAdmin2Module('subs');}
+function loadDefAvatarsPage(){if(window.loadDefAvatars)loadDefAvatars();else loadAdmin2Module('defav');}
+function loadProfileThemesPage(){if(window.loadProfileThemes)loadProfileThemes();else loadAdmin2Module('pthemes');}
+function loadBotsPage(){if(window.loadBots)loadBots();else loadAdmin2Module('bots');}
+function loadAnnPage(){if(window.loadAnn)loadAnn();else loadAdmin2Module('ann');}
+function loadBroadcastPage(){if(window.loadBroadcast)loadBroadcast();else loadAdmin2Module('broadcast');}
+function loadAdsPage(){if(window.loadAds)loadAds();else loadAdmin2Module('ads');}
+function loadWallAdminPage(){if(window.loadWallAdmin)loadWallAdmin();else loadAdmin2Module('wall');}
+function loadReportsPage(){if(window.loadReports)loadReports();else loadAdmin2Module('reports');}
+function loadPagesPage(){if(window.loadPages)loadPages();else loadAdmin2Module('pages');}
+function loadEmojisPage(){if(window.loadEmojis)loadEmojis();else loadAdmin2Module('emojis');}
+function loadSoundsPage(){if(window.loadSounds)loadSounds();else loadAdmin2Module('sounds');}
+function loadRadioPage(){if(window.loadRadio)loadRadio();else loadAdmin2Module('radio');}
+function loadGamesPage(){if(window.loadGames)loadGames();else loadAdmin2Module('games');}
+function loadFeaturesPage(){if(window.loadFeatures)loadFeatures();else loadAdmin2Module('features');}
+function loadLangsPage(){if(window.loadLangs)loadLangs();else loadAdmin2Module('langs');}
+function loadPlansPage(){if(window.loadPlans)loadPlans();else loadAdmin2Module('plans');}
+function loadPaymentsPage(){if(window.loadPayments)loadPayments();else loadAdmin2Module('payments');}
+function loadEarningsPage(){if(window.loadEarnings)loadEarnings();else loadAdmin2Module('earnings');}
+function loadActivityPage(){if(window.loadActivity)loadActivity();else loadAdmin2Module('activity');}
+function loadSettingsPage(){if(window.loadSettings)loadSettings();else loadAdmin2Module('settings');}
+
+let admin2Loaded=false;
+function loadAdmin2Module(module){
+  if(!admin2Loaded){
+    admin2Loaded=true;
+    const s=document.createElement('script');
+    s.src='/admin2.js';
+    s.onload=()=>{const fn=window['load'+module.charAt(0).toUpperCase()+module.slice(1)];if(fn)fn();};
+    document.head.appendChild(s);
+  }
+}
+
+// ── INIT ────────────────────────────────────────────────
+async function init(){
+  const tok=token();
+  if(!tok){location.href='/';return;}
+  // Verify admin
+  const stats=await apiFetch('/api/admin/stats');
+  if(stats?.error==='Forbidden'||stats?.error==='Unauthorized'){
+    alert('ليس لديك صلاحية الوصول للأدمن');location.href='/';return;
+  }
+  const u=JSON.parse(localStorage.getItem('chat_user')||'{}');
+  if(u.username) document.getElementById('aside-username').textContent='👑 '+u.username;
+  await loadConfig();
+  loadStats();
+  loadDashMsgs();
+  loadDashUsers();
+  setInterval(loadStats,30000);
+  if(window.innerWidth<768) document.getElementById('menu-toggle').style.display='flex';
+}
+init();
+</script>
+</body>
+</html>
