@@ -475,7 +475,7 @@ router.post('/reports/:id/resolve', adminMiddleware, (req,res)=>{
 router.get('/payments', adminMiddleware, (req,res)=>res.json(db.prepare('SELECT p.*,u.username FROM payments p LEFT JOIN users u ON p.user_id=u.id ORDER BY p.created_at DESC LIMIT 200').all()));
 router.post('/payments', adminMiddleware, (req,res)=>{
   const{user_id,plan_id,amount,method,reference,notes}=req.body;
-  const info=db.prepare("INSERT INTO payments (user_id,plan_id,amount,method,reference,notes,status,processed_by) VALUES (?,?,?,?,?,?,?,?)").run(user_id,plan_id||null,parseFloat(amount),method||'manual',reference||'',notes||','completed',req.user.id);
+  const info=db.prepare("INSERT INTO payments (user_id,plan_id,amount,method,reference,notes,status,processed_by) VALUES (?,?,?,?,?,?,?,?)").run(user_id,plan_id||null,parseFloat(amount),method||'manual',reference||'',notes||'','completed',req.user.id);
   db.prepare('INSERT INTO earnings (source,amount,notes) VALUES (?,?,?)').run('subscription',parseFloat(amount),`اشتراك المستخدم #${user_id}`);
   res.json({ok:true,id:info.lastInsertRowid});
 });
