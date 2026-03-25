@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>إعداد الموقع - أول تشغيل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--p:#7c3aed;--pl:#a78bfa;--ac:#f59e0b;--bg:#08081a;--sf:#111128;--bd:#252545;--tx:#e2e8f0;--txm:#94a3b8;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+
+/* Animated background */
+.bg-orbs{position:fixed;inset:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbFloat 8s ease-in-out infinite;}
+.orb1{width:500px;height:500px;background:rgba(124,58,237,.2);top:-200px;right:-100px;animation-delay:0s;}
+.orb2{width:400px;height:400px;background:rgba(245,158,11,.15);bottom:-150px;left:-100px;animation-delay:-3s;}
+.orb3{width:300px;height:300px;background:rgba(167,139,250,.1);top:50%;left:50%;animation-delay:-6s;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-30px) scale(1.05);}}
+
+/* Particles */
+.pt{position:fixed;width:4px;height:4px;border-radius:50%;pointer-events:none;animation:ptFloat linear infinite;}
+@keyframes ptFloat{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:.6;}90%{opacity:.3;}100%{transform:translateY(-100px) rotate(720deg);opacity:0;}}
+
+/* Card */
+.card{position:relative;background:rgba(17,17,40,.85);border:1px solid rgba(124,58,237,.3);border-radius:24px;padding:40px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;backdrop-filter:blur(20px);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(167,139,250,.1),inset 0 1px 0 rgba(255,255,255,.05);animation:cardIn .5s ease;}
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.97);}to{opacity:1;transform:none;}}
+.card::-webkit-scrollbar{width:4px;}
+.card::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px;}
+
+/* Logo */
+.setup-logo{text-align:center;margin-bottom:28px;}
+.logo-icon{font-size:64px;display:block;animation:logoBounce 2s ease infinite;}
+@keyframes logoBounce{0%,100%{transform:translateY(0) rotate(0deg);}25%{transform:translateY(-8px) rotate(-5deg);}75%{transform:translateY(-4px) rotate(3deg);}}
+.logo-title{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--pl),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:8px;}
+.logo-sub{font-size:13px;color:var(--txm);margin-top:4px;}
+
+/* Progress steps */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.sd-circle{width:36px;height:36px;border-radius:50%;border:2px solid var(--bd);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:all .3s;color:var(--txm);}
+.step-dot.done .sd-circle{background:var(--p);border-color:var(--p);color:#fff;}
+.step-dot.active .sd-circle{background:rgba(124,58,237,.2);border-color:var(--pl);color:var(--pl);box-shadow:0 0 0 4px rgba(124,58,237,.15);}
+.sd-label{font-size:10px;color:var(--txm);white-space:nowrap;}
+.step-dot.active .sd-label{color:var(--pl);}
+.step-dot.done .sd-label{color:var(--ok,#22c55e);}
+.step-line{flex:1;height:2px;background:var(--bd);margin:0 6px;margin-bottom:18px;transition:background .3s;}
+.step-line.done{background:var(--p);}
+
+/* Pages */
+.setup-page{display:none;animation:pgIn .3s ease;}
+.setup-page.active{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:none;}}
+
+/* Form */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.fg label{font-size:11px;color:var(--txm);font-weight:700;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:5px;}
+.fg label span{font-size:14px;}
+.fg input,.fg textarea,.fg select{background:rgba(8,8,26,.8);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;color:var(--tx);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:all .2s;width:100%;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(124,58,237,.15);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(148,163,184,.5);}
+.fg textarea{resize:none;height:80px;direction:rtl;}
+.input-hint{font-size:11px;color:rgba(148,163,184,.6);margin-top:3px;}
+
+/* Password strength */
+.pass-strength{height:4px;border-radius:2px;margin-top:6px;transition:all .3s;background:var(--bd);}
+.pass-strength.weak{background:linear-gradient(90deg,#ef4444 30%,var(--bd) 30%);}
+.pass-strength.medium{background:linear-gradient(90deg,var(--ac) 60%,var(--bd) 60%);}
+.pass-strength.strong{background:linear-gradient(90deg,#22c55e 100%,var(--bd) 100%);}
+
+/* Info box */
+.info-box{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+.info-box .ib-title{font-size:14px;font-weight:700;color:var(--pl);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.info-box p{font-size:13px;color:var(--txm);line-height:1.7;}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.feat-item{background:rgba(255,255,255,.03);border-radius:8px;padding:9px 11px;font-size:12px;display:flex;align-items:center;gap:7px;}
+.feat-icon{font-size:18px;}
+
+/* Buttons */
+.btn-next{width:100%;background:linear-gradient(135deg,var(--p),#5b21b6);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .25s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,58,237,.4);}
+.btn-next:active{transform:scale(.98);}
+.btn-next:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-back{background:transparent;border:1px solid var(--bd);border-radius:12px;padding:11px;color:var(--txm);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14px;width:100%;margin-top:8px;transition:all .2s;}
+.btn-back:hover{border-color:var(--p);color:var(--pl);}
+
+/* Error */
+.err-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 14px;font-size:13px;color:#f87171;margin-bottom:12px;display:none;animation:errShake .3s ease;}
+@keyframes errShake{0%,100%{transform:translateX(0);}25%,75%{transform:translateX(-5px);}50%{transform:translateX(5px);}}
+
+/* Loading */
+.spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Success */
+.success-wrap{text-align:center;padding:20px 0;}
+.success-icon{font-size:80px;animation:popIn .5s ease;}
+@keyframes popIn{0%{transform:scale(0) rotate(-30deg);}60%{transform:scale(1.2) rotate(5deg);}100%{transform:scale(1) rotate(0);};}
+.success-title{font-size:26px;font-weight:900;margin:16px 0 8px;background:linear-gradient(135deg,var(--pl),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.success-sub{font-size:14px;color:var(--txm);margin-bottom:24px;}
+.success-btns{display:flex;flex-direction:column;gap:10px;}
+.sb-chat{background:linear-gradient(135deg,var(--p),#5b21b6);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;}
+.sb-admin{background:linear-gradient(135deg,#d97706,#92400e);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;}
+.sb-chat:hover,.sb-admin:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3);}
+
+/* Color picker preview */
+.color-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.cp-item{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s;}
+.cp-item:hover,.cp-item.selected{transform:scale(1.2);border-color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+<div id="particles"></div>
+
+<div class="card">
+  <!-- Logo -->
+  <div class="setup-logo">
+    <span class="logo-icon">🚀</span>
+    <div class="logo-title">إعداد شات عربي</div>
+    <div class="logo-sub">سيستغرق الإعداد أقل من دقيقتين</div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step-dot active" id="sd0"><div class="sd-circle">1</div><div class="sd-label">مرحباً</div></div>
+    <div class="step-line" id="sl01"></div>
+    <div class="step-dot" id="sd1"><div class="sd-circle">2</div><div class="sd-label">الموقع</div></div>
+    <div class="step-line" id="sl12"></div>
+    <div class="step-dot" id="sd2"><div class="sd-circle">3</div><div class="sd-label">الأدمن</div></div>
+    <div class="step-line" id="sl23"></div>
+    <div class="step-dot" id="sd3"><div class="sd-circle">4</div><div class="sd-label">المظهر</div></div>
+    <div class="step-line" id="sl34"></div>
+    <div class="step-dot" id="sd4"><div class="sd-circle">✓</div><div class="sd-label">انطلق!</div></div>
+  </div>
+
+  <!-- Page 0: Welcome -->
+  <div class="setup-page active" id="sp0">
+    <div class="info-box">
+      <div class="ib-title">🎉 مرحباً! أنت أول مستخدم في الموقع</div>
+      <p>حسابك سيحصل تلقائياً على صلاحية <strong style="color:var(--ac)">صاحب الموقع (Owner)</strong> مع تحكم كامل مطلق في كل شيء.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feat-item"><span class="feat-icon">🎛️</span>لوحة أدمن كاملة</div>
+      <div class="feat-item"><span class="feat-icon">💬</span>شات حي Socket.IO</div>
+      <div class="feat-item"><span class="feat-icon">👑</span>نظام رتب ونقاط</div>
+      <div class="feat-item"><span class="feat-icon">💰</span>إدارة إعلانات</div>
+      <div class="feat-item"><span class="feat-icon">🎵</span>راديو وصوت</div>
+      <div class="feat-item"><span class="feat-icon">🧱</span>حائط صداقات</div>
+      <div class="feat-item"><span class="feat-icon">🎮</span>ألعاب داخلية</div>
+      <div class="feat-item"><span class="feat-icon">🔒</span>حماية متكاملة</div>
+      <div class="feat-item"><span class="feat-icon">📱</span>متجاوب بالكامل</div>
+      <div class="feat-item"><span class="feat-icon">🌐</span>تعدد اللغات</div>
+    </div>
+    <button class="btn-next" onclick="goStep(1)">ابدأ الإعداد ← <span>🚀</span></button>
+  </div>
+
+  <!-- Page 1: Site info -->
+  <div class="setup-page" id="sp1">
+    <div class="fg">
+      <label><span>🏷️</span> اسم الموقع</label>
+      <input type="text" id="s-name" placeholder="مثال: شات نور، وادي الشات..." value="شات عربي"/>
+    </div>
+    <div class="fg">
+      <label><span>📝</span> وصف الموقع</label>
+      <textarea id="s-desc" placeholder="وصف قصير يظهر في محركات البحث...">أفضل شات عربي على الإنترنت</textarea>
+    </div>
+    <div class="fg">
+      <label><span>🔖</span> عنوان التبويب (Title Tag)</label>
+      <input type="text" id="s-title" value="شات عربي | تواصل وتعارف"/>
+    </div>
+    <div class="fg">
+      <label><span>🔗</span> رابط الشعار (Logo URL) - اختياري</label>
+      <input type="url" id="s-logo" placeholder="https://example.com/logo.png"/>
+    </div>
+    <button class="btn-next" onclick="goStep(2)">التالي: حساب الأدمن ←</button>
+    <button class="btn-back" onclick="goStep(0)">← رجوع</button>
+  </div>
+
+  <!-- Page 2: Admin account -->
+  <div class="setup-page" id="sp2">
+    <div class="info-box">
+      <div class="ib-title">🔐 حساب صاحب الموقع</div>
+      <p>هذا الحساب هو حسابك الشخصي كصاحب الموقع. الـ ID بتاعك سيكون <strong style="color:var(--ac)">#1</strong> وتحكمك سيكون كاملاً.</p>
+    </div>
+    <div class="fg">
+      <label><span>👤</span> اسم المستخدم (للأدمن)</label>
+      <input type="text" id="s-user" placeholder="admin, owner, اسمك..."/>
+    </div>
+    <div class="fg">
+      <label><span>📧</span> البريد الإلكتروني</label>
+      <input type="email" id="s-email" placeholder="you@example.com"/>
+    </div>
+    <div class="fg">
+      <label><span>🔑</span> كلمة المرور</label>
+      <input type="password" id="s-pass" placeholder="كلمة مرور قوية جداً..." oninput="checkPass(this.value)"/>
+      <div class="pass-strength" id="pass-bar"></div>
+      <div class="input-hint" id="pass-hint">استخدم حروف كبيرة وصغيرة وأرقام ورموز</div>
+    </div>
+    <div class="fg">
+      <label><span>🔑</span> تأكيد كلمة المرور</label>
+      <input type="password" id="s-pass2" placeholder="أعد كتابة كلمة المرور..."/>
+    </div>
+    <div class="err-box" id="step2-err"></div>
+    <button class="btn-next" onclick="goStep(3)">التالي: المظهر ←</button>
+    <button class="btn-back" onclick="goStep(1)">← رجوع</button>
+  </div>
+
+  <!-- Page 3: Theme -->
+  <div class="setup-page" id="sp3">
+    <div class="fg">
+      <label><span>🎨</span> اللون الرئيسي للموقع</label>
+      <div class="color-preview" id="color-picker">
+        <div class="cp-item selected" style="background:#7c3aed" data-color="#7c3aed" onclick="selectColor(this)" title="بنفسجي"></div>
+        <div class="cp-item" style="background:#2563eb" data-color="#2563eb" onclick="selectColor(this)" title="أزرق"></div>
+        <div class="cp-item" style="background:#16a34a" data-color="#16a34a" onclick="selectColor(this)" title="أخضر"></div>
+        <div class="cp-item" style="background:#d97706" data-color="#d97706" onclick="selectColor(this)" title="ذهبي"></div>
+        <div class="cp-item" style="background:#e11d48" data-color="#e11d48" onclick="selectColor(this)" title="أحمر"></div>
+        <div class="cp-item" style="background:#0891b2" data-color="#0891b2" onclick="selectColor(this)" title="سماوي"></div>
+        <div class="cp-item" style="background:#7c3aed;background:linear-gradient(135deg,#7c3aed,#e11d48)" data-color="#7c3aed" onclick="selectColor(this)" title="متدرج"></div>
+      </div>
+      <input type="color" id="custom-color" value="#7c3aed" style="margin-top:8px;width:100%;height:40px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:2px 5px;cursor:pointer;" oninput="document.getElementById('sel-color').value=this.value"/>
+    </div>
+    <div class="fg">
+      <label><span>🌙</span> الثيم العام</label>
+      <select id="s-theme">
+        <option value="dark-purple">🌑 داكن بنفسجي (افتراضي)</option>
+        <option value="dark-blue">🔵 داكن أزرق</option>
+        <option value="dark-green">🟢 داكن أخضر</option>
+        <option value="black-gold">✨ أسود ذهبي</option>
+        <option value="ocean">🌊 محيط عميق</option>
+        <option value="light">☀️ فاتح</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label><span>✍️</span> خط الشات</label>
+      <select id="s-font">
+        <option value="Tajawal">Tajawal (تجوال)</option>
+        <option value="Cairo">Cairo (القاهرة)</option>
+        <option value="Almarai">Almarai (المراعي)</option>
+        <option value="Noto Kufi Arabic">Noto Kufi Arabic</option>
+        <option value="Amiri">Amiri (أميري)</option>
+      </select>
+    </div>
+    <input type="hidden" id="sel-color" value="#7c3aed"/>
+    <div class="err-box" id="step3-err"></div>
+    <button class="btn-next" id="finish-btn" onclick="doSetup()">🚀 إنشاء الموقع الآن!</button>
+    <button class="btn-back" onclick="goStep(2)">← رجوع</button>
+  </div>
+
+  <!-- Page 4: Done -->
+  <div class="setup-page" id="sp4">
+    <div class="success-wrap">
+      <div class="success-icon">🎊</div>
+      <div class="success-title">تم إنشاء موقعك!</div>
+      <div class="success-sub">مرحباً <strong id="done-name" style="color:var(--pl)"></strong>، موقعك جاهز للانطلاق 🎉</div>
+      <div class="success-btns">
+        <button class="sb-chat" onclick="location.href='/'">💬 ادخل الشات الآن</button>
+        <button class="sb-admin" onclick="location.href='/admin'">⚙️ افتح لوحة الأدمن</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Particles
+(function(){
+  const container = document.getElementById('particles');
+  const colors = ['#7c3aed','#a78bfa','#f59e0b','#60a5fa'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.className='pt';
+    const s=Math.random()*6+2;
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+8}s;animation-delay:-${Math.random()*15}s;opacity:.4;`;
+    container.appendChild(p);
+  }
+})();
+
+let currentStep=0;
+let savedToken=null;
+
+const themes={
+  'dark-purple':{primaryColor:'#7c3aed',primaryLight:'#a78bfa',accentColor:'#f59e0b',bgColor:'#0f0f1a',surfaceColor:'#1a1a2e',borderColor:'#2a2a4a',msgBg:'#1e1e3a',msgOwnBg:'#3b1d8a',textColor:'#e2e8f0'},
+  'dark-blue':{primaryColor:'#2563eb',primaryLight:'#60a5fa',accentColor:'#0ea5e9',bgColor:'#0a0f1a',surfaceColor:'#0f1929',borderColor:'#1e2d45',msgBg:'#111e35',msgOwnBg:'#1d3a6b',textColor:'#e2e8f0'},
+  'dark-green':{primaryColor:'#16a34a',primaryLight:'#4ade80',accentColor:'#fbbf24',bgColor:'#071a0f',surfaceColor:'#0e2318',borderColor:'#1a3a25',msgBg:'#0f2d1a',msgOwnBg:'#1a4a2b',textColor:'#e2e8f0'},
+  'black-gold':{primaryColor:'#d97706',primaryLight:'#fbbf24',accentColor:'#f59e0b',bgColor:'#000000',surfaceColor:'#111111',borderColor:'#2a2000',msgBg:'#1a1500',msgOwnBg:'#2d2000',textColor:'#fde68a'},
+  'ocean':{primaryColor:'#0891b2',primaryLight:'#22d3ee',accentColor:'#06b6d4',bgColor:'#020617',surfaceColor:'#0c1a2e',borderColor:'#164e63',msgBg:'#0c2340',msgOwnBg:'#0e3a5e',textColor:'#e0f2fe'},
+  'light':{primaryColor:'#7c3aed',primaryLight:'#6d28d9',accentColor:'#f59e0b',bgColor:'#f8fafc',surfaceColor:'#ffffff',borderColor:'#e2e8f0',msgBg:'#f1f5f9',msgOwnBg:'#ede9fe',textColor:'#1e293b'},
+};
+
+function goStep(n){
+  if(n===2 && !validateStep1()) return;
+  if(n===3 && !validateStep2()) return;
+
+  document.querySelectorAll('.setup-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('sp'+n).classList.add('active');
+
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i<n) d.classList.add('done');
+    if(i===n) d.classList.add('active');
+  });
+  document.querySelectorAll('.step-line').forEach((l,i)=>{
+    l.classList.toggle('done', i<n);
+  });
+  currentStep=n;
+}
+
+function validateStep1(){return true;}
+
+function validateStep2(){
+  const u=document.getElementById('s-user').value.trim();
+  const e=document.getElementById('s-email').value.trim();
+  const p=document.getElementById('s-pass').value;
+  const p2=document.getElementById('s-pass2').value;
+  const err=document.getElementById('step2-err');
+  if(!u){showErr('step2-err','أدخل اسم المستخدم');return false;}
+  if(u.length<3){showErr('step2-err','الاسم يجب أن يكون 3 أحرف على الأقل');return false;}
+  if(!e||!e.includes('@')){showErr('step2-err','أدخل بريداً إلكترونياً صحيحاً');return false;}
+  if(!p||p.length<8){showErr('step2-err','كلمة المرور يجب أن تكون 8 أحرف على الأقل');return false;}
+  if(p!==p2){showErr('step2-err','كلمتا المرور غير متطابقتين');return false;}
+  err.style.display='none';
+  return true;
+}
+
+function showErr(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg;el.style.display='block';
+  setTimeout(()=>el.style.display='none',4000);
+}
+
+function checkPass(v){
+  const bar=document.getElementById('pass-bar');
+  const hint=document.getElementById('pass-hint');
+  if(!v){bar.className='pass-strength';hint.textContent='استخدم حروف كبيرة وصغيرة وأرقام ورموز';return;}
+  const strong=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/.test(v);
+  const medium=/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(v);
+  if(strong){bar.className='pass-strength strong';hint.textContent='✅ كلمة مرور قوية جداً';}
+  else if(medium){bar.className='pass-strength medium';hint.textContent='⚠️ متوسطة - أضف رموزاً';}
+  else{bar.className='pass-strength weak';hint.textContent='❌ ضعيفة - أضف أرقاماً وأحرفاً كبيرة';}
+}
+
+function selectColor(el){
+  document.querySelectorAll('.cp-item').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('sel-color').value=el.dataset.color;
+  document.getElementById('custom-color').value=el.dataset.color;
+}
+
+async function doSetup(){
+  const btn=document.getElementById('finish-btn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spinner"></div> جاري الإنشاء...';
+
+  const siteName=document.getElementById('s-name').value.trim()||'شات عربي';
+  const siteDesc=document.getElementById('s-desc').value.trim();
+  const titleTag=document.getElementById('s-title').value.trim();
+  const logoUrl=document.getElementById('s-logo').value.trim();
+  const username=document.getElementById('s-user').value.trim();
+  const email=document.getElementById('s-email').value.trim();
+  const password=document.getElementById('s-pass').value;
+  const theme=document.getElementById('s-theme').value;
+  const chatFont=document.getElementById('s-font').value;
+  const primaryColor=document.getElementById('sel-color').value;
+
+  try{
+    // Step 1: Setup account
+    const r=await fetch('/api/auth/setup',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username,email,password,siteName,siteDesc})
+    });
+    const d=await r.json();
+    if(!r.ok||!d.ok){showErr('step3-err',d.error||'فشل الإنشاء');btn.disabled=false;btn.innerHTML='🚀 إنشاء الموقع الآن!';return;}
+
+    savedToken=d.token;
+    localStorage.setItem('chat_token',d.token);
+    localStorage.setItem('chat_user',JSON.stringify(d.user));
+
+    // Step 2: Apply theme config
+    const themeColors=themes[theme]||themes['dark-purple'];
+    const configBody={
+      siteName,siteDesc,titleTag:titleTag||siteName+' | تواصل وتعارف',
+      logoUrl,chatFont,...themeColors,
+      primaryColor: primaryColor||themeColors.primaryColor,
+    };
+    await fetch('/api/admin/config',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+d.token},
+      body:JSON.stringify(configBody)
+    });
+
+    document.getElementById('done-name').textContent=username;
+    goStep(4);
+  }catch(e){
+    showErr('step3-err','خطأ: '+e.message);
+    btn.disabled=false;btn.innerHTML='🚀 إنشاء الموقع الآن!';
+  }
+}
+
+// Check if already set up
+fetch('/api/setup/status').then(r=>r.json()).then(d=>{
+  if(!d.needsSetup) window.location.href='/';
+}).catch(()=>{});
+</script>
+</body>
+</html>
