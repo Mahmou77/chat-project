@@ -1,0 +1,37 @@
+{
+  "name": "arabic-chat-pro",
+  "version": "3.0.0",
+  "description": "شات عربي احترافي - نظام شات متكامل",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "install-all": "npm install && echo 'تم التثبيت بنجاح!'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "better-sqlite3": "^9.4.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "compression": "^1.7.4",
+    "express-validator": "^7.0.1",
+    "xss": "^1.0.14",
+    "uuid": "^9.0.0",
+    "sharp": "^0.33.2",
+    "node-cron": "^3.0.3",
+    "dotenv": "^16.4.1",
+    "morgan": "^1.10.0",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
